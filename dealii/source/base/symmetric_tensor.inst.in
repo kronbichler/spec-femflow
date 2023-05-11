@@ -1,0 +1,79 @@
+// ---------------------------------------------------------------------
+//
+// Copyright (C) 2016 - 2019 by the deal.II authors
+//
+// This file is part of the deal.II library.
+//
+// The deal.II library is free software; you can use it, redistribute
+// it, and/or modify it under the terms of the GNU Lesser General
+// Public License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// The full text of the license can be found in the file LICENSE.md at
+// the top level directory of deal.II.
+//
+// ---------------------------------------------------------------------
+
+
+for (deal_II_dimension : DIMENSIONS; number : REAL_SCALARS)
+  {
+    template class SymmetricTensor<2, deal_II_dimension, number>;
+
+    template class SymmetricTensor<4, deal_II_dimension, number>;
+
+    template std::array<number, deal_II_dimension> eigenvalues(
+      const SymmetricTensor<2, deal_II_dimension, number> &);
+
+    template std::array<std::pair<number, Tensor<1, deal_II_dimension, number>>,
+                        std::integral_constant<int, deal_II_dimension>::value>
+    eigenvectors(const SymmetricTensor<2, deal_II_dimension, number> &,
+                 const SymmetricTensorEigenvectorMethod);
+  }
+
+for (deal_II_dimension : DIMENSIONS; number : DIFFERENTIABLE_ADOLC_REAL_SCALARS)
+  {
+    template class SymmetricTensor<2, deal_II_dimension, number>;
+
+    template class SymmetricTensor<4, deal_II_dimension, number>;
+  }
+
+for (deal_II_dimension : DIMENSIONS;
+     number : DIFFERENTIABLE_TRILINOS_SACADO_REAL_SCALARS)
+  {
+    template class SymmetricTensor<2, deal_II_dimension, number>;
+
+    template class SymmetricTensor<4, deal_II_dimension, number>;
+
+    template std::array<number, deal_II_dimension> eigenvalues(
+      const SymmetricTensor<2, deal_II_dimension, number> &);
+
+    template std::array<std::pair<number, Tensor<1, deal_II_dimension, number>>,
+                        std::integral_constant<int, deal_II_dimension>::value>
+    eigenvectors(const SymmetricTensor<2, deal_II_dimension, number> &,
+                 const SymmetricTensorEigenvectorMethod);
+  }
+
+for (deal_II_dimension : DIMENSIONS; number : COMPLEX_SCALARS)
+  {
+    template class SymmetricTensor<2, deal_II_dimension, number>;
+
+    template class SymmetricTensor<4, deal_II_dimension, number>;
+  }
+
+
+for (number : REAL_SCALARS)
+  {
+    template SymmetricTensor<4, 3, number> invert(
+      const SymmetricTensor<4, 3, number> &t);
+  }
+
+for (number : DIFFERENTIABLE_ADOLC_REAL_SCALARS)
+  {
+    template SymmetricTensor<4, 3, number> invert(
+      const SymmetricTensor<4, 3, number> &t);
+  }
+
+for (number : DIFFERENTIABLE_TRILINOS_SACADO_REAL_SCALARS)
+  {
+    template SymmetricTensor<4, 3, number> invert(
+      const SymmetricTensor<4, 3, number> &t);
+  }

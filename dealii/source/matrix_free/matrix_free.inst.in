@@ -1,0 +1,74 @@
+// ---------------------------------------------------------------------
+//
+// Copyright (C) 2010 - 2020 by the deal.II authors
+//
+// This file is part of the deal.II library.
+//
+// The deal.II library is free software; you can use it, redistribute
+// it, and/or modify it under the terms of the GNU Lesser General
+// Public License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// The full text of the license can be found in the file LICENSE.md at
+// the top level directory of deal.II.
+//
+// ---------------------------------------------------------------------
+
+
+for (deal_II_dimension : DIMENSIONS;
+     deal_II_scalar_vectorized : REAL_SCALARS_VECTORIZED)
+  {
+    template class MatrixFree<deal_II_dimension,
+                              deal_II_scalar_vectorized::value_type,
+                              deal_II_scalar_vectorized>;
+
+    template void MatrixFree<deal_II_dimension,
+                             deal_II_scalar_vectorized::value_type,
+                             deal_II_scalar_vectorized>::
+      print_memory_consumption<std::ostream>(std::ostream &) const;
+
+    template void MatrixFree<deal_II_dimension,
+                             deal_II_scalar_vectorized::value_type,
+                             deal_II_scalar_vectorized>::
+      print_memory_consumption<ConditionalOStream>(ConditionalOStream &) const;
+
+    template void MatrixFree<deal_II_dimension,
+                             deal_II_scalar_vectorized::value_type,
+                             deal_II_scalar_vectorized>::
+      internal_reinit<deal_II_scalar_vectorized::value_type>(
+        const std::shared_ptr<hp::MappingCollection<deal_II_dimension>> &,
+        const std::vector<const DoFHandler<deal_II_dimension> *> &,
+        const std::vector<
+          const AffineConstraints<deal_II_scalar_vectorized::value_type> *> &,
+        const std::vector<IndexSet> &,
+        const std::vector<hp::QCollection<deal_II_dimension>> &,
+        const AdditionalData &);
+  }
+
+
+for (deal_II_dimension : DIMENSIONS;
+     deal_II_float_vectorized : FLOAT_VECTORIZED)
+  {
+    template void MatrixFree<deal_II_dimension,
+                             deal_II_float_vectorized::value_type,
+                             deal_II_float_vectorized>::
+      internal_reinit<double>(
+        const std::shared_ptr<hp::MappingCollection<deal_II_dimension>> &,
+        const std::vector<const DoFHandler<deal_II_dimension> *> &,
+        const std::vector<const AffineConstraints<double> *> &,
+        const std::vector<IndexSet> &,
+        const std::vector<hp::QCollection<deal_II_dimension>> &,
+        const AdditionalData &);
+  }
+
+
+for (deal_II_dimension : DIMENSIONS; deal_II_space_dimension : SPACE_DIMENSIONS;
+     deal_II_scalar_vectorized : REAL_SCALARS_VECTORIZED)
+  {
+#if deal_II_dimension <= deal_II_space_dimension
+    template bool MatrixFree<deal_II_dimension,
+                             deal_II_scalar_vectorized::value_type,
+                             deal_II_scalar_vectorized>::
+      is_supported(
+        const FiniteElement<deal_II_dimension, deal_II_space_dimension> &);
+#endif
+  }

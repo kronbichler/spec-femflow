@@ -1,0 +1,102 @@
+// ---------------------------------------------------------------------
+//
+// Copyright (C) 2018 - 2022 by the deal.II authors
+//
+// This file is part of the deal.II library.
+//
+// The deal.II library is free software; you can use it, redistribute
+// it, and/or modify it under the terms of the GNU Lesser General
+// Public License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// The full text of the license can be found in the file LICENSE.md at
+// the top level directory of deal.II.
+//
+// ---------------------------------------------------------------------
+
+
+for (dim0 : DIMENSIONS; dim1 : DIMENSIONS; spacedim : SPACE_DIMENSIONS;
+     S : REAL_AND_COMPLEX_SCALARS)
+  {
+#if dim1 <= spacedim && dim0 <= spacedim
+    template void create_coupling_sparsity_pattern(
+      const DoFHandler<dim0, spacedim> &space_dh,
+      const DoFHandler<dim1, spacedim> &immersed_dh,
+      const Quadrature<dim1> &          quad,
+      SparsityPatternBase &             sparsity,
+      const AffineConstraints<S> &      constraints,
+      const ComponentMask &             space_comps,
+      const ComponentMask &             immersed_comps,
+      const Mapping<dim0, spacedim> &   space_mapping,
+      const Mapping<dim1, spacedim> &   immersed_mapping,
+      const AffineConstraints<S> &      immersed_constraints);
+
+    template void create_coupling_sparsity_pattern(
+      const GridTools::Cache<dim0, spacedim> &cache,
+      const DoFHandler<dim0, spacedim> &      space_dh,
+      const DoFHandler<dim1, spacedim> &      immersed_dh,
+      const Quadrature<dim1> &                quad,
+      SparsityPatternBase &                   sparsity,
+      const AffineConstraints<S> &            constraints,
+      const ComponentMask &                   space_comps,
+      const ComponentMask &                   immersed_comps,
+      const Mapping<dim1, spacedim> &         immersed_mapping,
+      const AffineConstraints<S> &            immersed_constraints);
+
+    template void create_coupling_sparsity_pattern(
+      const double &                          epsilon,
+      const GridTools::Cache<dim0, spacedim> &cache0,
+      const GridTools::Cache<dim1, spacedim> &cache1,
+      const DoFHandler<dim0, spacedim> &      dh0,
+      const DoFHandler<dim1, spacedim> &      dh1,
+      const Quadrature<dim1> &                quad,
+      SparsityPatternBase &                   sparsity,
+      const AffineConstraints<S> &            constraints0,
+      const ComponentMask &                   comps0,
+      const ComponentMask &                   comps1);
+#endif
+  }
+
+
+for (dim0 : DIMENSIONS; dim1 : DIMENSIONS; spacedim : SPACE_DIMENSIONS;
+     Matrix : SPARSE_MATRICES)
+  {
+#if dim1 <= spacedim && dim0 <= spacedim
+    template void create_coupling_mass_matrix(
+      const DoFHandler<dim0, spacedim> &           space_dh,
+      const DoFHandler<dim1, spacedim> &           immersed_dh,
+      const Quadrature<dim1> &                     quad,
+      Matrix &                                     matrix,
+      const AffineConstraints<Matrix::value_type> &constraints,
+      const ComponentMask &                        space_comps,
+      const ComponentMask &                        immersed_comps,
+      const Mapping<dim0, spacedim> &              space_mapping,
+      const Mapping<dim1, spacedim> &              immersed_mapping,
+      const AffineConstraints<Matrix::value_type> &immersed_constraints);
+
+    template void create_coupling_mass_matrix(
+      const GridTools::Cache<dim0, spacedim> &     cache,
+      const DoFHandler<dim0, spacedim> &           space_dh,
+      const DoFHandler<dim1, spacedim> &           immersed_dh,
+      const Quadrature<dim1> &                     quad,
+      Matrix &                                     matrix,
+      const AffineConstraints<Matrix::value_type> &constraints,
+      const ComponentMask &                        space_comps,
+      const ComponentMask &                        immersed_comps,
+      const Mapping<dim1, spacedim> &              immersed_mapping,
+      const AffineConstraints<Matrix::value_type> &immersed_constraints);
+
+    template void create_coupling_mass_matrix(
+      Functions::CutOffFunctionBase<spacedim> & kernel,
+      const double &                                        epsilon,
+      const GridTools::Cache<dim0, spacedim> &              cache0,
+      const GridTools::Cache<dim1, spacedim> &              cache1,
+      const DoFHandler<dim0, spacedim> &                    dh0,
+      const DoFHandler<dim1, spacedim> &                    dh1,
+      const Quadrature<dim0> &                              quadrature0,
+      const Quadrature<dim1> &                              quadrature1,
+      Matrix &                                              matrix,
+      const AffineConstraints<typename Matrix::value_type> &constraints0,
+      const ComponentMask &                                 comps0,
+      const ComponentMask &                                 comps1);
+#endif
+  }

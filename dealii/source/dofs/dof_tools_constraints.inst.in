@@ -1,0 +1,115 @@
+// ---------------------------------------------------------------------
+//
+// Copyright (C) 2009 - 2022 by the deal.II authors
+//
+// This file is part of the deal.II library.
+//
+// The deal.II library is free software; you can use it, redistribute
+// it, and/or modify it under the terms of the GNU Lesser General
+// Public License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// The full text of the license can be found in the file LICENSE.md at
+// the top level directory of deal.II.
+//
+// ---------------------------------------------------------------------
+
+for (deal_II_dimension : DIMENSIONS; deal_II_space_dimension : SPACE_DIMENSIONS;
+     S : REAL_AND_COMPLEX_SCALARS)
+  {
+#if deal_II_dimension <= deal_II_space_dimension
+    template void DoFTools::make_periodicity_constraints(
+      const DoFHandler<deal_II_dimension,
+                       deal_II_space_dimension>::face_iterator &,
+      const DoFHandler<deal_II_dimension,
+                       deal_II_space_dimension>::face_iterator &,
+      AffineConstraints<S> &,
+      const ComponentMask &,
+      bool,
+      bool,
+      bool,
+      const FullMatrix<double> &,
+      const std::vector<unsigned int> &,
+      const S);
+#endif
+  }
+
+for (deal_II_dimension : DIMENSIONS; deal_II_space_dimension : SPACE_DIMENSIONS;
+     S : REAL_AND_COMPLEX_SCALARS)
+  {
+#if deal_II_dimension <= deal_II_space_dimension
+    template void
+    DoFTools::make_periodicity_constraints<deal_II_dimension,
+                                           deal_II_space_dimension,
+                                           S>(
+      const std::vector<GridTools::PeriodicFacePair<
+        DoFHandler<deal_II_dimension, deal_II_space_dimension>::cell_iterator>>
+        &,
+      AffineConstraints<S> &,
+      const ComponentMask &,
+      const std::vector<unsigned int> &,
+      const S);
+
+    template void DoFTools::make_periodicity_constraints(
+      const DoFHandler<deal_II_dimension, deal_II_space_dimension> &,
+      const types::boundary_id,
+      const types::boundary_id,
+      const unsigned int,
+      AffineConstraints<S> &,
+      const ComponentMask &,
+      const S);
+
+    template void DoFTools::make_periodicity_constraints(
+      const DoFHandler<deal_II_dimension, deal_II_space_dimension> &,
+      const types::boundary_id,
+      const unsigned int,
+      AffineConstraints<S> &,
+      const ComponentMask &,
+      const S);
+#endif
+  }
+
+for (deal_II_dimension : DIMENSIONS; deal_II_space_dimension : SPACE_DIMENSIONS;
+     S : REAL_AND_COMPLEX_SCALARS)
+  {
+#if deal_II_dimension <= deal_II_space_dimension
+    template void DoFTools::make_hanging_node_constraints(
+      const DoFHandler<deal_II_dimension, deal_II_space_dimension> &,
+      AffineConstraints<S> &);
+
+    template void DoFTools::make_zero_boundary_constraints(
+      const DoFHandler<deal_II_dimension, deal_II_space_dimension> &,
+      AffineConstraints<S> &,
+      const ComponentMask &);
+
+    template void DoFTools::make_zero_boundary_constraints(
+      const DoFHandler<deal_II_dimension, deal_II_space_dimension> &,
+      const types::boundary_id,
+      AffineConstraints<S> &,
+      const ComponentMask &);
+
+#endif
+  }
+
+for (deal_II_dimension : DIMENSIONS; deal_II_space_dimension : SPACE_DIMENSIONS)
+  {
+#if deal_II_dimension <= deal_II_space_dimension
+    template void DoFTools::compute_intergrid_constraints(
+      const DoFHandler<deal_II_dimension, deal_II_space_dimension> &,
+      const unsigned int,
+      const DoFHandler<deal_II_dimension, deal_II_space_dimension> &,
+      const unsigned int,
+      const InterGridMap<DoFHandler<deal_II_dimension, deal_II_space_dimension>>
+        &,
+      AffineConstraints<double> &);
+
+    template void
+    DoFTools::compute_intergrid_transfer_representation<deal_II_dimension>(
+      const DoFHandler<deal_II_dimension, deal_II_space_dimension> &,
+      const unsigned int,
+      const DoFHandler<deal_II_dimension, deal_II_space_dimension> &,
+      const unsigned int,
+      const InterGridMap<DoFHandler<deal_II_dimension, deal_II_space_dimension>>
+        &,
+      std::vector<std::map<types::global_dof_index, float>> &);
+#endif
+  }

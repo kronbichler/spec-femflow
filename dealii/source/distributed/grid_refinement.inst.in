@@ -1,0 +1,120 @@
+// ---------------------------------------------------------------------
+//
+// Copyright (C) 2010 - 2021 by the deal.II authors
+//
+// This file is part of the deal.II library.
+//
+// The deal.II library is free software; you can use it, redistribute
+// it, and/or modify it under the terms of the GNU Lesser General
+// Public License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// The full text of the license can be found in the file LICENSE.md at
+// the top level directory of deal.II.
+//
+// ---------------------------------------------------------------------
+
+
+
+for (S : REAL_SCALARS)
+  {
+    namespace internal
+    \{
+      namespace parallel
+      \{
+        namespace distributed
+        \{
+          namespace GridRefinement
+          \{
+            template std::pair<S, S>
+            compute_global_min_and_max_at_root<S>(const dealii::Vector<S> &,
+                                                  const MPI_Comm &);
+
+            namespace RefineAndCoarsenFixedNumber
+            \{
+              template S
+              compute_threshold<S>(const dealii::Vector<S> &,
+                                   const std::pair<double, double> &,
+                                   const types::global_cell_index,
+                                   const MPI_Comm &);
+            \}
+            namespace RefineAndCoarsenFixedFraction
+            \{
+              template S
+              compute_threshold<S>(const dealii::Vector<S> &,
+                                   const std::pair<double, double> &,
+                                   const double,
+                                   const MPI_Comm &);
+            \}
+          \}
+        \}
+      \}
+    \}
+  }
+
+
+
+for (S : REAL_SCALARS; deal_II_dimension : DIMENSIONS)
+  {
+    namespace parallel
+    \{
+      namespace distributed
+      \{
+        namespace GridRefinement
+        \{
+          template void
+          refine_and_coarsen_fixed_number<deal_II_dimension,
+                                          S,
+                                          deal_II_dimension>(
+            dealii::Triangulation<deal_II_dimension> &,
+            const dealii::Vector<S> &,
+            const double,
+            const double,
+            const types::global_cell_index);
+
+          template void
+          refine_and_coarsen_fixed_fraction<deal_II_dimension,
+                                            S,
+                                            deal_II_dimension>(
+            dealii::Triangulation<deal_II_dimension> &,
+            const dealii::Vector<S> &,
+            const double,
+            const double,
+            const VectorTools::NormType);
+        \}
+      \}
+    \}
+
+
+#if deal_II_dimension == 3
+
+    namespace parallel
+    \{
+      namespace distributed
+      \{
+        namespace GridRefinement
+        \{
+          template void
+          refine_and_coarsen_fixed_number<deal_II_dimension - 1,
+                                          S,
+                                          deal_II_dimension>(
+            dealii::Triangulation<deal_II_dimension - 1, deal_II_dimension> &,
+            const dealii::Vector<S> &,
+            const double,
+            const double,
+            const types::global_cell_index);
+
+          template void
+          refine_and_coarsen_fixed_fraction<deal_II_dimension - 1,
+                                            S,
+                                            deal_II_dimension>(
+            dealii::Triangulation<deal_II_dimension - 1, deal_II_dimension> &,
+            const dealii::Vector<S> &,
+            const double,
+            const double,
+            const VectorTools::NormType);
+        \}
+      \}
+    \}
+
+#endif
+  }
