@@ -1654,26 +1654,26 @@ namespace internal
                   {
                     if (contract_over_rows == true)
                       {
-                        r0 = shapes[col] * xp[0];
-                        r1 = shapes[(n_rows - 1) * offset + col] * xm[0];
+                        r0 = shapes[col][0] * xp[0];
+                        r1 = shapes[(n_rows - 1) * offset + col][0] * xm[0];
                       }
                     else
                       {
-                        r0 = shapes[col * offset] * xp[0];
-                        r1 = shapes[(n_rows - 1 - col) * offset] * xm[0];
+                        r0 = shapes[col * offset][0] * xp[0];
+                        r1 = shapes[(n_rows - 1 - col) * offset][0] * xm[0];
                       }
                     for (int ind = 1; ind < mid; ++ind)
                       {
                         if (contract_over_rows == true)
                           {
-                            r0 += shapes[ind * offset + col] * xp[ind];
-                            r1 += shapes[(n_rows - 1 - ind) * offset + col] *
+                            r0 += shapes[ind * offset + col][0] * xp[ind];
+                            r1 += shapes[(n_rows - 1 - ind) * offset + col][0] *
                                   xm[ind];
                           }
                         else
                           {
-                            r0 += shapes[col * offset + ind] * xp[ind];
-                            r1 += shapes[(n_rows - 1 - col) * offset + ind] *
+                            r0 += shapes[col * offset + ind][0] * xp[ind];
+                            r1 += shapes[(n_rows - 1 - col) * offset + ind][0] *
                                   xm[ind];
                           }
                       }
@@ -1683,12 +1683,12 @@ namespace internal
                 if (mm % 2 == 1 && contract_over_rows == true)
                   {
                     if (type == 1)
-                      r1 += shapes[mid * offset + col] * xmid;
+                      r1 += shapes[mid * offset + col][0] * xmid;
                     else
-                      r0 += shapes[mid * offset + col] * xmid;
+                      r0 += shapes[mid * offset + col][0] * xmid;
                   }
                 else if (mm % 2 == 1 && (nn % 2 == 0 || type > 0 || mm == 3))
-                  r0 += shapes[col * offset + mid] * xmid;
+                  r0 += shapes[col * offset + mid][0] * xmid;
 
                 if (add)
                   {
@@ -1711,23 +1711,23 @@ namespace internal
                 mm % 2 == 1 && mm > 3)
               {
                 if (add)
-                  out[stride * n_cols] += shapes[mid * offset + n_cols] * xmid;
+                  out[stride * n_cols] += shapes[mid * offset + n_cols][0] * xmid;
                 else
-                  out[stride * n_cols] = shapes[mid * offset + n_cols] * xmid;
+                  out[stride * n_cols] = shapes[mid * offset + n_cols][0] * xmid;
               }
             else if (contract_over_rows == true && nn % 2 == 1)
               {
                 Number r0;
                 if (mid > 0)
                   {
-                    r0 = shapes[n_cols] * xp[0];
+                    r0 = shapes[n_cols][0] * xp[0];
                     for (int ind = 1; ind < mid; ++ind)
-                      r0 += shapes[ind * offset + n_cols] * xp[ind];
+                      r0 += shapes[ind * offset + n_cols][0] * xp[ind];
                   }
                 else
                   r0 = Number();
                 if (type != 1 && mm % 2 == 1)
-                  r0 += shapes[mid * offset + n_cols] * xmid;
+                  r0 += shapes[mid * offset + n_cols][0] * xmid;
 
                 if (add)
                   out[stride * n_cols] += r0;
@@ -1741,22 +1741,22 @@ namespace internal
                   {
                     if (type == 1)
                       {
-                        r0 = shapes[n_cols * offset] * xm[0];
+                        r0 = shapes[n_cols * offset][0] * xm[0];
                         for (int ind = 1; ind < mid; ++ind)
-                          r0 += shapes[n_cols * offset + ind] * xm[ind];
+                          r0 += shapes[n_cols * offset + ind][0] * xm[ind];
                       }
                     else
                       {
-                        r0 = shapes[n_cols * offset] * xp[0];
+                        r0 = shapes[n_cols * offset][0] * xp[0];
                         for (int ind = 1; ind < mid; ++ind)
-                          r0 += shapes[n_cols * offset + ind] * xp[ind];
+                          r0 += shapes[n_cols * offset + ind][0] * xp[ind];
                       }
                   }
                 else
                   r0 = Number();
 
                 if ((type == 0 || type == 2) && mm % 2 == 1)
-                  r0 += shapes[n_cols * offset + mid] * xmid;
+                  r0 += shapes[n_cols * offset + mid][0] * xmid;
 
                 if (add)
                   out[stride * n_cols] += r0;
