@@ -1832,7 +1832,6 @@ namespace NavierStokes_DG
       }
 
     viscous_operator.print_solver_statistics();
-    timer.print_wall_time_statistics(MPI_COMM_WORLD);
     pcout << std::endl;
   }
 
