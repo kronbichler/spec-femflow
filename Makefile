@@ -7,7 +7,7 @@ INCLUDEDIRS = -Idealii/include \
               -Idealii/bundled/boost-1.70.0/include
 
 %.o : %.cc
-	c++ -std=c++17 -march=native -O3 -c $< -o $@ $(INCLUDEDIRS)
+	c++ -std=c++17 -march=native -O3 -fopenmp-simd -c $< -o $@ $(INCLUDEDIRS)
 
 %.o : %.cpp
 	c++ -std=c++17 -march=native -O3 -c $< -o $@ $(INCLUDEDIRS)

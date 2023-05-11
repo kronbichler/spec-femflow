@@ -124,7 +124,7 @@
  * compiler flags and hardware (e.g. 256 for AVX on x86-64 architectures) for
  * use in deal.II's instrinsics-based VectorizedArray class.
  */
-#define DEAL_II_VECTORIZATION_WIDTH_IN_BITS 256
+#define DEAL_II_VECTORIZATION_WIDTH_IN_BITS 0
 
 /*
  * Backward compatibility setting

@@ -1744,20 +1744,6 @@ namespace NavierStokes_DG
   void
   FlowProblem<dim>::run(const double final_time)
   {
-    {
-      const unsigned int n_vect_number = VectorizedArrayType::size();
-      const unsigned int n_vect_bits   = 8 * sizeof(Number) * n_vect_number;
-
-      pcout << "Running with "
-            << Utilities::MPI::n_mpi_processes(MPI_COMM_WORLD)
-            << " MPI processes" << std::endl;
-      pcout << "Vectorization over " << n_vect_number << ' '
-            << (std::is_same<Number, double>::value ? "doubles" : "floats")
-            << " = " << n_vect_bits << " bits ("
-            << Utilities::System::get_current_vectorization_level() << ')'
-            << std::endl;
-    }
-
     make_grid();
 
     make_dofs();
