@@ -1122,6 +1122,7 @@ namespace NavierStokes_DG
 
         SolverControl        control(1000, 1e-7 * rhs.l2_norm());
         SolverCG<VectorType> solver_cg(control);
+        energy_solution = 0;
         solver_cg.solve(energy_operator, energy_solution, rhs, energy_diagonal);
         n_energy_iterations += control.last_step();
         energy_residuals += control.last_value();

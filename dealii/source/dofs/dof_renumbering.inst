@@ -2281,52 +2281,52 @@ namespace DoFRenumbering
 namespace DoFRenumbering
  {
  template void
- matrix_free_data_locality< 2 ,
-  2 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >(
- DoFHandler< 2 ,  2 > &,
- const MatrixFree< 2 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> > &);
+ matrix_free_data_locality< 1 ,
+  1 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >(
+ DoFHandler< 1 ,  1 > &,
+ const MatrixFree< 1 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> > &);
 
  template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality< 2 ,
-  2 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >(
- const DoFHandler< 2 ,  2 > &,
- const MatrixFree< 2 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> > &);
+ compute_matrix_free_data_locality< 1 ,
+  1 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >(
+ const DoFHandler< 1 ,  1 > &,
+ const MatrixFree< 1 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> > &);
 
  template void
  matrix_free_data_locality<
-  2 ,
-  2 ,
-  VectorizedArray<double,1> ::value_type,
- MatrixFree< 2 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >::AdditionalData>(
- DoFHandler< 2 ,  2 > &,
- const AffineConstraints< VectorizedArray<double,1> ::value_type> &,
- const MatrixFree< 2 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >::AdditionalData &);
+  1 ,
+  1 ,
+  VectorizedArray<double,8> ::value_type,
+ MatrixFree< 1 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData>(
+ DoFHandler< 1 ,  1 > &,
+ const AffineConstraints< VectorizedArray<double,8> ::value_type> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality<
-  2 ,
-  2 ,
-  VectorizedArray<double,1> ::value_type,
- MatrixFree< 2 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >::AdditionalData>(
- const DoFHandler< 2 ,  2 > &,
- const AffineConstraints< VectorizedArray<double,1> ::value_type> &,
- const MatrixFree< 2 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >::AdditionalData &);
+  1 ,
+  1 ,
+  VectorizedArray<double,8> ::value_type,
+ MatrixFree< 1 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData>(
+ const DoFHandler< 1 ,  1 > &,
+ const AffineConstraints< VectorizedArray<double,8> ::value_type> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData &);
  }
  
 #endif
@@ -2334,52 +2334,52 @@ namespace DoFRenumbering
 namespace DoFRenumbering
  {
  template void
- matrix_free_data_locality< 2 ,
-  2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >(
- DoFHandler< 2 ,  2 > &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> > &);
+ matrix_free_data_locality< 1 ,
+  1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >(
+ DoFHandler< 1 ,  1 > &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> > &);
 
  template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality< 2 ,
-  2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >(
- const DoFHandler< 2 ,  2 > &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> > &);
+ compute_matrix_free_data_locality< 1 ,
+  1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >(
+ const DoFHandler< 1 ,  1 > &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> > &);
 
  template void
  matrix_free_data_locality<
-  2 ,
-  2 ,
-  VectorizedArray<float,1> ::value_type,
- MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData>(
- DoFHandler< 2 ,  2 > &,
- const AffineConstraints< VectorizedArray<float,1> ::value_type> &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData &);
+  1 ,
+  1 ,
+  VectorizedArray<float,16> ::value_type,
+ MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ DoFHandler< 1 ,  1 > &,
+ const AffineConstraints< VectorizedArray<float,16> ::value_type> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality<
-  2 ,
-  2 ,
-  VectorizedArray<float,1> ::value_type,
- MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData>(
- const DoFHandler< 2 ,  2 > &,
- const AffineConstraints< VectorizedArray<float,1> ::value_type> &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData &);
+  1 ,
+  1 ,
+  VectorizedArray<float,16> ::value_type,
+ MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ const DoFHandler< 1 ,  1 > &,
+ const AffineConstraints< VectorizedArray<float,16> ::value_type> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
  }
  
 #endif
@@ -2389,50 +2389,50 @@ namespace DoFRenumbering
  template void
  matrix_free_data_locality< 2 ,
   2 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >(
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >(
  DoFHandler< 2 ,  2 > &,
  const MatrixFree< 2 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> > &);
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> > &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality< 2 ,
   2 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >(
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >(
  const DoFHandler< 2 ,  2 > &,
  const MatrixFree< 2 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> > &);
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> > &);
 
  template void
  matrix_free_data_locality<
   2 ,
   2 ,
-  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,1> ::value_type,
  MatrixFree< 2 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >::AdditionalData>(
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >::AdditionalData>(
  DoFHandler< 2 ,  2 > &,
- const AffineConstraints< VectorizedArray<double,2> ::value_type> &,
+ const AffineConstraints< VectorizedArray<double,1> ::value_type> &,
  const MatrixFree< 2 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >::AdditionalData &);
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >::AdditionalData &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality<
   2 ,
   2 ,
-  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,1> ::value_type,
  MatrixFree< 2 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >::AdditionalData>(
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >::AdditionalData>(
  const DoFHandler< 2 ,  2 > &,
- const AffineConstraints< VectorizedArray<double,2> ::value_type> &,
+ const AffineConstraints< VectorizedArray<double,1> ::value_type> &,
  const MatrixFree< 2 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >::AdditionalData &);
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >::AdditionalData &);
  }
  
 #endif
@@ -2442,50 +2442,50 @@ namespace DoFRenumbering
  template void
  matrix_free_data_locality< 2 ,
   2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >(
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >(
  DoFHandler< 2 ,  2 > &,
  const MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> > &);
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> > &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality< 2 ,
   2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >(
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >(
  const DoFHandler< 2 ,  2 > &,
  const MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> > &);
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> > &);
 
  template void
  matrix_free_data_locality<
   2 ,
   2 ,
-  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,1> ::value_type,
  MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData>(
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData>(
  DoFHandler< 2 ,  2 > &,
- const AffineConstraints< VectorizedArray<float,4> ::value_type> &,
+ const AffineConstraints< VectorizedArray<float,1> ::value_type> &,
  const MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData &);
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality<
   2 ,
   2 ,
-  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,1> ::value_type,
  MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData>(
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData>(
  const DoFHandler< 2 ,  2 > &,
- const AffineConstraints< VectorizedArray<float,4> ::value_type> &,
+ const AffineConstraints< VectorizedArray<float,1> ::value_type> &,
  const MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData &);
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData &);
  }
  
 #endif
@@ -2495,6 +2495,112 @@ namespace DoFRenumbering
  template void
  matrix_free_data_locality< 2 ,
   2 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >(
+ DoFHandler< 2 ,  2 > &,
+ const MatrixFree< 2 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> > &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality< 2 ,
+  2 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >(
+ const DoFHandler< 2 ,  2 > &,
+ const MatrixFree< 2 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> > &);
+
+ template void
+ matrix_free_data_locality<
+  2 ,
+  2 ,
+  VectorizedArray<double,2> ::value_type,
+ MatrixFree< 2 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >::AdditionalData>(
+ DoFHandler< 2 ,  2 > &,
+ const AffineConstraints< VectorizedArray<double,2> ::value_type> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  2 ,
+  2 ,
+  VectorizedArray<double,2> ::value_type,
+ MatrixFree< 2 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >::AdditionalData>(
+ const DoFHandler< 2 ,  2 > &,
+ const AffineConstraints< VectorizedArray<double,2> ::value_type> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(29))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality< 2 ,
+  2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >(
+ DoFHandler< 2 ,  2 > &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> > &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality< 2 ,
+  2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >(
+ const DoFHandler< 2 ,  2 > &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> > &);
+
+ template void
+ matrix_free_data_locality<
+  2 ,
+  2 ,
+  VectorizedArray<float,4> ::value_type,
+ MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData>(
+ DoFHandler< 2 ,  2 > &,
+ const AffineConstraints< VectorizedArray<float,4> ::value_type> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  2 ,
+  2 ,
+  VectorizedArray<float,4> ::value_type,
+ MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData>(
+ const DoFHandler< 2 ,  2 > &,
+ const AffineConstraints< VectorizedArray<float,4> ::value_type> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(30))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality< 2 ,
+  2 ,
   VectorizedArray<double,4> ::value_type,
   VectorizedArray<double,4> >(
  DoFHandler< 2 ,  2 > &,
@@ -2542,7 +2648,7 @@ namespace DoFRenumbering
  }
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(29))
+#if (SPLIT_INSTANTIATIONS_CHECK(31))
 namespace DoFRenumbering
  {
  template void
@@ -2595,162 +2701,56 @@ namespace DoFRenumbering
  }
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(30))
-namespace DoFRenumbering
- {
- template void
- matrix_free_data_locality< 3 ,
-  3 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >(
- DoFHandler< 3 ,  3 > &,
- const MatrixFree< 3 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> > &);
-
- template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality< 3 ,
-  3 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >(
- const DoFHandler< 3 ,  3 > &,
- const MatrixFree< 3 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> > &);
-
- template void
- matrix_free_data_locality<
-  3 ,
-  3 ,
-  VectorizedArray<double,1> ::value_type,
- MatrixFree< 3 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >::AdditionalData>(
- DoFHandler< 3 ,  3 > &,
- const AffineConstraints< VectorizedArray<double,1> ::value_type> &,
- const MatrixFree< 3 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >::AdditionalData &);
-
- template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality<
-  3 ,
-  3 ,
-  VectorizedArray<double,1> ::value_type,
- MatrixFree< 3 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >::AdditionalData>(
- const DoFHandler< 3 ,  3 > &,
- const AffineConstraints< VectorizedArray<double,1> ::value_type> &,
- const MatrixFree< 3 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >::AdditionalData &);
- }
- 
-#endif
-#if (SPLIT_INSTANTIATIONS_CHECK(31))
-namespace DoFRenumbering
- {
- template void
- matrix_free_data_locality< 3 ,
-  3 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >(
- DoFHandler< 3 ,  3 > &,
- const MatrixFree< 3 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> > &);
-
- template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality< 3 ,
-  3 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >(
- const DoFHandler< 3 ,  3 > &,
- const MatrixFree< 3 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> > &);
-
- template void
- matrix_free_data_locality<
-  3 ,
-  3 ,
-  VectorizedArray<float,1> ::value_type,
- MatrixFree< 3 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData>(
- DoFHandler< 3 ,  3 > &,
- const AffineConstraints< VectorizedArray<float,1> ::value_type> &,
- const MatrixFree< 3 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData &);
-
- template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality<
-  3 ,
-  3 ,
-  VectorizedArray<float,1> ::value_type,
- MatrixFree< 3 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData>(
- const DoFHandler< 3 ,  3 > &,
- const AffineConstraints< VectorizedArray<float,1> ::value_type> &,
- const MatrixFree< 3 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData &);
- }
- 
-#endif
 #if (SPLIT_INSTANTIATIONS_CHECK(32))
 namespace DoFRenumbering
  {
  template void
- matrix_free_data_locality< 3 ,
-  3 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >(
- DoFHandler< 3 ,  3 > &,
- const MatrixFree< 3 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> > &);
+ matrix_free_data_locality< 2 ,
+  2 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >(
+ DoFHandler< 2 ,  2 > &,
+ const MatrixFree< 2 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> > &);
 
  template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality< 3 ,
-  3 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >(
- const DoFHandler< 3 ,  3 > &,
- const MatrixFree< 3 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> > &);
+ compute_matrix_free_data_locality< 2 ,
+  2 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >(
+ const DoFHandler< 2 ,  2 > &,
+ const MatrixFree< 2 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> > &);
 
  template void
  matrix_free_data_locality<
-  3 ,
-  3 ,
-  VectorizedArray<double,2> ::value_type,
- MatrixFree< 3 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >::AdditionalData>(
- DoFHandler< 3 ,  3 > &,
- const AffineConstraints< VectorizedArray<double,2> ::value_type> &,
- const MatrixFree< 3 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >::AdditionalData &);
+  2 ,
+  2 ,
+  VectorizedArray<double,8> ::value_type,
+ MatrixFree< 2 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData>(
+ DoFHandler< 2 ,  2 > &,
+ const AffineConstraints< VectorizedArray<double,8> ::value_type> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality<
-  3 ,
-  3 ,
-  VectorizedArray<double,2> ::value_type,
- MatrixFree< 3 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >::AdditionalData>(
- const DoFHandler< 3 ,  3 > &,
- const AffineConstraints< VectorizedArray<double,2> ::value_type> &,
- const MatrixFree< 3 ,
-  VectorizedArray<double,2> ::value_type,
-  VectorizedArray<double,2> >::AdditionalData &);
+  2 ,
+  2 ,
+  VectorizedArray<double,8> ::value_type,
+ MatrixFree< 2 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData>(
+ const DoFHandler< 2 ,  2 > &,
+ const AffineConstraints< VectorizedArray<double,8> ::value_type> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData &);
  }
  
 #endif
@@ -2758,52 +2758,52 @@ namespace DoFRenumbering
 namespace DoFRenumbering
  {
  template void
- matrix_free_data_locality< 3 ,
-  3 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >(
- DoFHandler< 3 ,  3 > &,
- const MatrixFree< 3 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> > &);
+ matrix_free_data_locality< 2 ,
+  2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >(
+ DoFHandler< 2 ,  2 > &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> > &);
 
  template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality< 3 ,
-  3 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >(
- const DoFHandler< 3 ,  3 > &,
- const MatrixFree< 3 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> > &);
+ compute_matrix_free_data_locality< 2 ,
+  2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >(
+ const DoFHandler< 2 ,  2 > &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> > &);
 
  template void
  matrix_free_data_locality<
-  3 ,
-  3 ,
-  VectorizedArray<float,4> ::value_type,
- MatrixFree< 3 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData>(
- DoFHandler< 3 ,  3 > &,
- const AffineConstraints< VectorizedArray<float,4> ::value_type> &,
- const MatrixFree< 3 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData &);
+  2 ,
+  2 ,
+  VectorizedArray<float,16> ::value_type,
+ MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ DoFHandler< 2 ,  2 > &,
+ const AffineConstraints< VectorizedArray<float,16> ::value_type> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality<
-  3 ,
-  3 ,
-  VectorizedArray<float,4> ::value_type,
- MatrixFree< 3 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData>(
- const DoFHandler< 3 ,  3 > &,
- const AffineConstraints< VectorizedArray<float,4> ::value_type> &,
- const MatrixFree< 3 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData &);
+  2 ,
+  2 ,
+  VectorizedArray<float,16> ::value_type,
+ MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ const DoFHandler< 2 ,  2 > &,
+ const AffineConstraints< VectorizedArray<float,16> ::value_type> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
  }
  
 #endif
@@ -2813,6 +2813,218 @@ namespace DoFRenumbering
  template void
  matrix_free_data_locality< 3 ,
   3 ,
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >(
+ DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> > &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >(
+ const DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> > &);
+
+ template void
+ matrix_free_data_locality<
+  3 ,
+  3 ,
+  VectorizedArray<double,1> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >::AdditionalData>(
+ DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<double,1> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  3 ,
+  3 ,
+  VectorizedArray<double,1> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >::AdditionalData>(
+ const DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<double,1> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(35))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >(
+ DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> > &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >(
+ const DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> > &);
+
+ template void
+ matrix_free_data_locality<
+  3 ,
+  3 ,
+  VectorizedArray<float,1> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData>(
+ DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<float,1> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  3 ,
+  3 ,
+  VectorizedArray<float,1> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData>(
+ const DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<float,1> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(36))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >(
+ DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> > &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >(
+ const DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> > &);
+
+ template void
+ matrix_free_data_locality<
+  3 ,
+  3 ,
+  VectorizedArray<double,2> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >::AdditionalData>(
+ DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<double,2> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  3 ,
+  3 ,
+  VectorizedArray<double,2> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >::AdditionalData>(
+ const DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<double,2> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,2> ::value_type,
+  VectorizedArray<double,2> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(37))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >(
+ DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> > &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >(
+ const DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> > &);
+
+ template void
+ matrix_free_data_locality<
+  3 ,
+  3 ,
+  VectorizedArray<float,4> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData>(
+ DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<float,4> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  3 ,
+  3 ,
+  VectorizedArray<float,4> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData>(
+ const DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<float,4> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(38))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality< 3 ,
+  3 ,
   VectorizedArray<double,4> ::value_type,
   VectorizedArray<double,4> >(
  DoFHandler< 3 ,  3 > &,
@@ -2860,7 +3072,7 @@ namespace DoFRenumbering
  }
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(35))
+#if (SPLIT_INSTANTIATIONS_CHECK(39))
 namespace DoFRenumbering
  {
  template void
@@ -2913,168 +3125,56 @@ namespace DoFRenumbering
  }
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(36))
-namespace DoFRenumbering
- {
- template void
- matrix_free_data_locality<
-  1 ,
-  1 ,
- double,
- MatrixFree< 1 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData>(
- DoFHandler< 1 ,  1 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 1 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData &);
-
- template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality<
-  1 ,
-  1 ,
- double,
- MatrixFree< 1 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData>(
- const DoFHandler< 1 ,  1 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 1 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData &);
- }
- 
-#endif
-#if (SPLIT_INSTANTIATIONS_CHECK(37))
-namespace DoFRenumbering
- {
- template void
- matrix_free_data_locality<
-  1 ,
-  1 ,
- double,
- MatrixFree< 1 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData>(
- DoFHandler< 1 ,  1 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 1 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData &);
-
- template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality<
-  1 ,
-  1 ,
- double,
- MatrixFree< 1 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData>(
- const DoFHandler< 1 ,  1 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 1 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData &);
- }
- 
-#endif
-#if (SPLIT_INSTANTIATIONS_CHECK(38))
-namespace DoFRenumbering
- {
- template void
- matrix_free_data_locality<
-  1 ,
-  1 ,
- double,
- MatrixFree< 1 ,
-  VectorizedArray<float,8> ::value_type,
-  VectorizedArray<float,8> >::AdditionalData>(
- DoFHandler< 1 ,  1 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 1 ,
-  VectorizedArray<float,8> ::value_type,
-  VectorizedArray<float,8> >::AdditionalData &);
-
- template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality<
-  1 ,
-  1 ,
- double,
- MatrixFree< 1 ,
-  VectorizedArray<float,8> ::value_type,
-  VectorizedArray<float,8> >::AdditionalData>(
- const DoFHandler< 1 ,  1 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 1 ,
-  VectorizedArray<float,8> ::value_type,
-  VectorizedArray<float,8> >::AdditionalData &);
- }
- 
-#endif
-#if (SPLIT_INSTANTIATIONS_CHECK(39))
-namespace DoFRenumbering
- {
- template void
- matrix_free_data_locality<
-  2 ,
-  2 ,
- double,
- MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData>(
- DoFHandler< 2 ,  2 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData &);
-
- template std::vector<types::global_dof_index>
- compute_matrix_free_data_locality<
-  2 ,
-  2 ,
- double,
- MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData>(
- const DoFHandler< 2 ,  2 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >::AdditionalData &);
- }
- 
-#endif
 #if (SPLIT_INSTANTIATIONS_CHECK(40))
 namespace DoFRenumbering
  {
  template void
+ matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >(
+ DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> > &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >(
+ const DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> > &);
+
+ template void
  matrix_free_data_locality<
-  2 ,
-  2 ,
- double,
- MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData>(
- DoFHandler< 2 ,  2 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData &);
+  3 ,
+  3 ,
+  VectorizedArray<double,8> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData>(
+ DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<double,8> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality<
-  2 ,
-  2 ,
- double,
- MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData>(
- const DoFHandler< 2 ,  2 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,4> ::value_type,
-  VectorizedArray<float,4> >::AdditionalData &);
+  3 ,
+  3 ,
+  VectorizedArray<double,8> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData>(
+ const DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<double,8> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >::AdditionalData &);
  }
  
 #endif
@@ -3082,32 +3182,52 @@ namespace DoFRenumbering
 namespace DoFRenumbering
  {
  template void
+ matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >(
+ DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> > &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality< 3 ,
+  3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >(
+ const DoFHandler< 3 ,  3 > &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> > &);
+
+ template void
  matrix_free_data_locality<
-  2 ,
-  2 ,
- double,
- MatrixFree< 2 ,
-  VectorizedArray<float,8> ::value_type,
-  VectorizedArray<float,8> >::AdditionalData>(
- DoFHandler< 2 ,  2 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,8> ::value_type,
-  VectorizedArray<float,8> >::AdditionalData &);
+  3 ,
+  3 ,
+  VectorizedArray<float,16> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<float,16> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality<
-  2 ,
-  2 ,
- double,
- MatrixFree< 2 ,
-  VectorizedArray<float,8> ::value_type,
-  VectorizedArray<float,8> >::AdditionalData>(
- const DoFHandler< 2 ,  2 > &,
- const AffineConstraints<double> &,
- const MatrixFree< 2 ,
-  VectorizedArray<float,8> ::value_type,
-  VectorizedArray<float,8> >::AdditionalData &);
+  3 ,
+  3 ,
+  VectorizedArray<float,16> ::value_type,
+ MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ const DoFHandler< 3 ,  3 > &,
+ const AffineConstraints< VectorizedArray<float,16> ::value_type> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
  }
  
 #endif
@@ -3116,29 +3236,29 @@ namespace DoFRenumbering
  {
  template void
  matrix_free_data_locality<
-  3 ,
-  3 ,
+  1 ,
+  1 ,
  double,
- MatrixFree< 3 ,
+ MatrixFree< 1 ,
   VectorizedArray<float,1> ::value_type,
   VectorizedArray<float,1> >::AdditionalData>(
- DoFHandler< 3 ,  3 > &,
+ DoFHandler< 1 ,  1 > &,
  const AffineConstraints<double> &,
- const MatrixFree< 3 ,
+ const MatrixFree< 1 ,
   VectorizedArray<float,1> ::value_type,
   VectorizedArray<float,1> >::AdditionalData &);
 
  template std::vector<types::global_dof_index>
  compute_matrix_free_data_locality<
-  3 ,
-  3 ,
+  1 ,
+  1 ,
  double,
- MatrixFree< 3 ,
+ MatrixFree< 1 ,
   VectorizedArray<float,1> ::value_type,
   VectorizedArray<float,1> >::AdditionalData>(
- const DoFHandler< 3 ,  3 > &,
+ const DoFHandler< 1 ,  1 > &,
  const AffineConstraints<double> &,
- const MatrixFree< 3 ,
+ const MatrixFree< 1 ,
   VectorizedArray<float,1> ::value_type,
   VectorizedArray<float,1> >::AdditionalData &);
  }
@@ -3149,6 +3269,270 @@ namespace DoFRenumbering
  {
  template void
  matrix_free_data_locality<
+  1 ,
+  1 ,
+ double,
+ MatrixFree< 1 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData>(
+ DoFHandler< 1 ,  1 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  1 ,
+  1 ,
+ double,
+ MatrixFree< 1 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData>(
+ const DoFHandler< 1 ,  1 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(44))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality<
+  1 ,
+  1 ,
+ double,
+ MatrixFree< 1 ,
+  VectorizedArray<float,8> ::value_type,
+  VectorizedArray<float,8> >::AdditionalData>(
+ DoFHandler< 1 ,  1 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,8> ::value_type,
+  VectorizedArray<float,8> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  1 ,
+  1 ,
+ double,
+ MatrixFree< 1 ,
+  VectorizedArray<float,8> ::value_type,
+  VectorizedArray<float,8> >::AdditionalData>(
+ const DoFHandler< 1 ,  1 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,8> ::value_type,
+  VectorizedArray<float,8> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(45))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality<
+  1 ,
+  1 ,
+ double,
+ MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ DoFHandler< 1 ,  1 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  1 ,
+  1 ,
+ double,
+ MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ const DoFHandler< 1 ,  1 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(46))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality<
+  2 ,
+  2 ,
+ double,
+ MatrixFree< 2 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData>(
+ DoFHandler< 2 ,  2 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  2 ,
+  2 ,
+ double,
+ MatrixFree< 2 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData>(
+ const DoFHandler< 2 ,  2 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(47))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality<
+  2 ,
+  2 ,
+ double,
+ MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData>(
+ DoFHandler< 2 ,  2 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  2 ,
+  2 ,
+ double,
+ MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData>(
+ const DoFHandler< 2 ,  2 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,4> ::value_type,
+  VectorizedArray<float,4> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(48))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality<
+  2 ,
+  2 ,
+ double,
+ MatrixFree< 2 ,
+  VectorizedArray<float,8> ::value_type,
+  VectorizedArray<float,8> >::AdditionalData>(
+ DoFHandler< 2 ,  2 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,8> ::value_type,
+  VectorizedArray<float,8> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  2 ,
+  2 ,
+ double,
+ MatrixFree< 2 ,
+  VectorizedArray<float,8> ::value_type,
+  VectorizedArray<float,8> >::AdditionalData>(
+ const DoFHandler< 2 ,  2 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,8> ::value_type,
+  VectorizedArray<float,8> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(49))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality<
+  2 ,
+  2 ,
+ double,
+ MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ DoFHandler< 2 ,  2 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  2 ,
+  2 ,
+ double,
+ MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ const DoFHandler< 2 ,  2 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(50))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality<
+  3 ,
+  3 ,
+ double,
+ MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData>(
+ DoFHandler< 3 ,  3 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  3 ,
+  3 ,
+ double,
+ MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData>(
+ const DoFHandler< 3 ,  3 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(51))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality<
   3 ,
   3 ,
  double,
@@ -3177,7 +3561,7 @@ namespace DoFRenumbering
  }
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(44))
+#if (SPLIT_INSTANTIATIONS_CHECK(52))
 namespace DoFRenumbering
  {
  template void
@@ -3207,6 +3591,39 @@ namespace DoFRenumbering
  const MatrixFree< 3 ,
   VectorizedArray<float,8> ::value_type,
   VectorizedArray<float,8> >::AdditionalData &);
+ }
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(53))
+namespace DoFRenumbering
+ {
+ template void
+ matrix_free_data_locality<
+  3 ,
+  3 ,
+ double,
+ MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ DoFHandler< 3 ,  3 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
+
+ template std::vector<types::global_dof_index>
+ compute_matrix_free_data_locality<
+  3 ,
+  3 ,
+ double,
+ MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData>(
+ const DoFHandler< 3 ,  3 > &,
+ const AffineConstraints<double> &,
+ const MatrixFree< 3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >::AdditionalData &);
  }
  
 #endif

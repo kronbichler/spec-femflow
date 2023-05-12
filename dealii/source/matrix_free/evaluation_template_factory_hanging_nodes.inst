@@ -50,86 +50,128 @@ template struct dealii::internal::FEEvaluationHangingNodesFactory<
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(6))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
-  2 ,
-  VectorizedArray<double,1> ::value_type,
-  VectorizedArray<double,1> >;
+  1 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >;
  
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(7))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
-  2 ,
-  VectorizedArray<float,1> ::value_type,
-  VectorizedArray<float,1> >;
+  1 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >;
  
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(8))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   2 ,
+  VectorizedArray<double,1> ::value_type,
+  VectorizedArray<double,1> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(9))
+template struct dealii::internal::FEEvaluationHangingNodesFactory<
+  2 ,
+  VectorizedArray<float,1> ::value_type,
+  VectorizedArray<float,1> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(10))
+template struct dealii::internal::FEEvaluationHangingNodesFactory<
+  2 ,
   VectorizedArray<double,2> ::value_type,
   VectorizedArray<double,2> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(9))
+#if (SPLIT_INSTANTIATIONS_CHECK(11))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   2 ,
   VectorizedArray<float,4> ::value_type,
   VectorizedArray<float,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(10))
+#if (SPLIT_INSTANTIATIONS_CHECK(12))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   2 ,
   VectorizedArray<double,4> ::value_type,
   VectorizedArray<double,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(11))
+#if (SPLIT_INSTANTIATIONS_CHECK(13))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   2 ,
   VectorizedArray<float,8> ::value_type,
   VectorizedArray<float,8> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(12))
+#if (SPLIT_INSTANTIATIONS_CHECK(14))
+template struct dealii::internal::FEEvaluationHangingNodesFactory<
+  2 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(15))
+template struct dealii::internal::FEEvaluationHangingNodesFactory<
+  2 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(16))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   3 ,
   VectorizedArray<double,1> ::value_type,
   VectorizedArray<double,1> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(13))
+#if (SPLIT_INSTANTIATIONS_CHECK(17))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   3 ,
   VectorizedArray<float,1> ::value_type,
   VectorizedArray<float,1> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(14))
+#if (SPLIT_INSTANTIATIONS_CHECK(18))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   3 ,
   VectorizedArray<double,2> ::value_type,
   VectorizedArray<double,2> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(15))
+#if (SPLIT_INSTANTIATIONS_CHECK(19))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   3 ,
   VectorizedArray<float,4> ::value_type,
   VectorizedArray<float,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(16))
+#if (SPLIT_INSTANTIATIONS_CHECK(20))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   3 ,
   VectorizedArray<double,4> ::value_type,
   VectorizedArray<double,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(17))
+#if (SPLIT_INSTANTIATIONS_CHECK(21))
 template struct dealii::internal::FEEvaluationHangingNodesFactory<
   3 ,
   VectorizedArray<float,8> ::value_type,
   VectorizedArray<float,8> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(22))
+template struct dealii::internal::FEEvaluationHangingNodesFactory<
+  3 ,
+  VectorizedArray<double,8> ::value_type,
+  VectorizedArray<double,8> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(23))
+template struct dealii::internal::FEEvaluationHangingNodesFactory<
+  3 ,
+  VectorizedArray<float,16> ::value_type,
+  VectorizedArray<float,16> >;
  
 #endif
 

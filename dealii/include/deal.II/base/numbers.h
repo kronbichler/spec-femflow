@@ -87,7 +87,7 @@ namespace internal
     /**
      * Maximal vector length of VectorizedArray for double.
      */
-    constexpr static unsigned int max_width = 4;
+    constexpr static unsigned int max_width = 8;
   };
 
   /**

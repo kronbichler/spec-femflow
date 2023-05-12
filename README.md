@@ -29,7 +29,7 @@ Number of degrees of freedom: 1,020,000 ( = 5 [vars] x 1,632 [cells] x 125 [dofs
 Time:   0.401, dt:   0.0018, kinetic energy:  0.1249357, dissipation:  0.0004742
 Time:   0.501, dt:   0.0018, kinetic energy:  0.1247678, dissipation:  0.0004765
 Velocity solver average iterations: 2.8
-Energy solver average iterations: 1 with accumulated error 0.0014
+Energy solver average iterations: 2 with accumulated error 0.0039
 
 
 real	5m31.263s
@@ -54,7 +54,7 @@ Number of degrees of freedom: 1,020,000 ( = 5 [vars] x 1,632 [cells] x 125 [dofs
 Time:   0.401, dt:   0.0018, kinetic energy:  0.1249357, dissipation:  0.0004742
 Time:   0.501, dt:   0.0018, kinetic energy:  0.1247678, dissipation:  0.0004765
 Velocity solver average iterations: 2.8
-Energy solver average iterations: 1 with accumulated error 0.0014
+Energy solver average iterations: 2 with accumulated error 0.0039
 
 
 real	0m49.049s

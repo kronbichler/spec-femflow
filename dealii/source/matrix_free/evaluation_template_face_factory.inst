@@ -98,6 +98,36 @@ template struct dealii::internal::
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(6))
 template struct dealii::internal::
+ FEFaceEvaluationFactory< 1 ,  VectorizedArray<double,8> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  1 ,
+ double,
+  VectorizedArray<double,8> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  1 ,
+ float,
+  VectorizedArray<double,8> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(7))
+template struct dealii::internal::
+ FEFaceEvaluationFactory< 1 ,  VectorizedArray<float,16> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  1 ,
+ double,
+  VectorizedArray<float,16> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  1 ,
+ float,
+  VectorizedArray<float,16> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(8))
+template struct dealii::internal::
  FEFaceEvaluationFactory< 2 ,  VectorizedArray<double,1> >;
 
  template struct dealii::internal::FEFaceEvaluationGatherFactory<
@@ -111,7 +141,7 @@ template struct dealii::internal::
   VectorizedArray<double,1> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(7))
+#if (SPLIT_INSTANTIATIONS_CHECK(9))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 2 ,  VectorizedArray<float,1> >;
 
@@ -126,7 +156,7 @@ template struct dealii::internal::
   VectorizedArray<float,1> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(8))
+#if (SPLIT_INSTANTIATIONS_CHECK(10))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 2 ,  VectorizedArray<double,2> >;
 
@@ -141,7 +171,7 @@ template struct dealii::internal::
   VectorizedArray<double,2> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(9))
+#if (SPLIT_INSTANTIATIONS_CHECK(11))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 2 ,  VectorizedArray<float,4> >;
 
@@ -156,7 +186,7 @@ template struct dealii::internal::
   VectorizedArray<float,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(10))
+#if (SPLIT_INSTANTIATIONS_CHECK(12))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 2 ,  VectorizedArray<double,4> >;
 
@@ -171,7 +201,7 @@ template struct dealii::internal::
   VectorizedArray<double,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(11))
+#if (SPLIT_INSTANTIATIONS_CHECK(13))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 2 ,  VectorizedArray<float,8> >;
 
@@ -186,7 +216,37 @@ template struct dealii::internal::
   VectorizedArray<float,8> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(12))
+#if (SPLIT_INSTANTIATIONS_CHECK(14))
+template struct dealii::internal::
+ FEFaceEvaluationFactory< 2 ,  VectorizedArray<double,8> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  2 ,
+ double,
+  VectorizedArray<double,8> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  2 ,
+ float,
+  VectorizedArray<double,8> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(15))
+template struct dealii::internal::
+ FEFaceEvaluationFactory< 2 ,  VectorizedArray<float,16> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  2 ,
+ double,
+  VectorizedArray<float,16> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  2 ,
+ float,
+  VectorizedArray<float,16> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(16))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 3 ,  VectorizedArray<double,1> >;
 
@@ -201,7 +261,7 @@ template struct dealii::internal::
   VectorizedArray<double,1> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(13))
+#if (SPLIT_INSTANTIATIONS_CHECK(17))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 3 ,  VectorizedArray<float,1> >;
 
@@ -216,7 +276,7 @@ template struct dealii::internal::
   VectorizedArray<float,1> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(14))
+#if (SPLIT_INSTANTIATIONS_CHECK(18))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 3 ,  VectorizedArray<double,2> >;
 
@@ -231,7 +291,7 @@ template struct dealii::internal::
   VectorizedArray<double,2> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(15))
+#if (SPLIT_INSTANTIATIONS_CHECK(19))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 3 ,  VectorizedArray<float,4> >;
 
@@ -246,7 +306,7 @@ template struct dealii::internal::
   VectorizedArray<float,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(16))
+#if (SPLIT_INSTANTIATIONS_CHECK(20))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 3 ,  VectorizedArray<double,4> >;
 
@@ -261,7 +321,7 @@ template struct dealii::internal::
   VectorizedArray<double,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(17))
+#if (SPLIT_INSTANTIATIONS_CHECK(21))
 template struct dealii::internal::
  FEFaceEvaluationFactory< 3 ,  VectorizedArray<float,8> >;
 
@@ -274,6 +334,36 @@ template struct dealii::internal::
   3 ,
  float,
   VectorizedArray<float,8> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(22))
+template struct dealii::internal::
+ FEFaceEvaluationFactory< 3 ,  VectorizedArray<double,8> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  3 ,
+ double,
+  VectorizedArray<double,8> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  3 ,
+ float,
+  VectorizedArray<double,8> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(23))
+template struct dealii::internal::
+ FEFaceEvaluationFactory< 3 ,  VectorizedArray<float,16> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  3 ,
+ double,
+  VectorizedArray<float,16> >;
+
+ template struct dealii::internal::FEFaceEvaluationGatherFactory<
+  3 ,
+ float,
+  VectorizedArray<float,16> >;
  
 #endif
 

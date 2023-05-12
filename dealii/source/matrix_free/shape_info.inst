@@ -404,82 +404,82 @@ template internal::MatrixFreeFunctions::
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(21))
 template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,1> >::ShapeInfo(
- const Quadrature< 2 > &,
- const FiniteElement< 2 ,  2 > &,
+ ShapeInfo< VectorizedArray<double,8> >::ShapeInfo(
+ const Quadrature< 1 > &,
+ const FiniteElement< 1 ,  1 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,1> >::reinit(
- const Quadrature< 2 > &,
- const FiniteElement< 2 ,  2 > &,
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,8> >::reinit(
+ const Quadrature< 1 > &,
+ const FiniteElement< 1 ,  1 > &,
  const unsigned int);
 
-#if  2  > 1
+#if  1  > 1
  template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,1> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<double,8> >::ShapeInfo(
  const Quadrature<1> &,
- const FiniteElement< 2 ,  2 > &,
+ const FiniteElement< 1 ,  1 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,1> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,8> >::reinit(
  const Quadrature<1> &,
- const FiniteElement< 2 ,  2 > &,
+ const FiniteElement< 1 ,  1 > &,
  const unsigned int);
 #endif
  
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(22))
 template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<float,1> >::ShapeInfo(
- const Quadrature< 2 > &,
- const FiniteElement< 2 ,  2 > &,
+ ShapeInfo< VectorizedArray<float,16> >::ShapeInfo(
+ const Quadrature< 1 > &,
+ const FiniteElement< 1 ,  1 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,1> >::reinit(
- const Quadrature< 2 > &,
- const FiniteElement< 2 ,  2 > &,
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,16> >::reinit(
+ const Quadrature< 1 > &,
+ const FiniteElement< 1 ,  1 > &,
  const unsigned int);
 
-#if  2  > 1
+#if  1  > 1
  template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<float,1> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<float,16> >::ShapeInfo(
  const Quadrature<1> &,
- const FiniteElement< 2 ,  2 > &,
+ const FiniteElement< 1 ,  1 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,1> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,16> >::reinit(
  const Quadrature<1> &,
- const FiniteElement< 2 ,  2 > &,
+ const FiniteElement< 1 ,  1 > &,
  const unsigned int);
 #endif
  
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(23))
 template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,2> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<double,1> >::ShapeInfo(
  const Quadrature< 2 > &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,2> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,1> >::reinit(
  const Quadrature< 2 > &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
 #if  2  > 1
  template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,2> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<double,1> >::ShapeInfo(
  const Quadrature<1> &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,2> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,1> >::reinit(
  const Quadrature<1> &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
@@ -488,26 +488,26 @@ template internal::MatrixFreeFunctions::
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(24))
 template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<float,4> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<float,1> >::ShapeInfo(
  const Quadrature< 2 > &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,4> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,1> >::reinit(
  const Quadrature< 2 > &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
 #if  2  > 1
  template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<float,4> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<float,1> >::ShapeInfo(
  const Quadrature<1> &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,4> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,1> >::reinit(
  const Quadrature<1> &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
@@ -516,26 +516,26 @@ template internal::MatrixFreeFunctions::
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(25))
 template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,4> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<double,2> >::ShapeInfo(
  const Quadrature< 2 > &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,4> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,2> >::reinit(
  const Quadrature< 2 > &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
 #if  2  > 1
  template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,4> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<double,2> >::ShapeInfo(
  const Quadrature<1> &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,4> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,2> >::reinit(
  const Quadrature<1> &,
  const FiniteElement< 2 ,  2 > &,
  const unsigned int);
@@ -544,6 +544,62 @@ template internal::MatrixFreeFunctions::
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(26))
 template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<float,4> >::ShapeInfo(
+ const Quadrature< 2 > &,
+ const FiniteElement< 2 ,  2 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,4> >::reinit(
+ const Quadrature< 2 > &,
+ const FiniteElement< 2 ,  2 > &,
+ const unsigned int);
+
+#if  2  > 1
+ template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<float,4> >::ShapeInfo(
+ const Quadrature<1> &,
+ const FiniteElement< 2 ,  2 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,4> >::reinit(
+ const Quadrature<1> &,
+ const FiniteElement< 2 ,  2 > &,
+ const unsigned int);
+#endif
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(27))
+template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<double,4> >::ShapeInfo(
+ const Quadrature< 2 > &,
+ const FiniteElement< 2 ,  2 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,4> >::reinit(
+ const Quadrature< 2 > &,
+ const FiniteElement< 2 ,  2 > &,
+ const unsigned int);
+
+#if  2  > 1
+ template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<double,4> >::ShapeInfo(
+ const Quadrature<1> &,
+ const FiniteElement< 2 ,  2 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,4> >::reinit(
+ const Quadrature<1> &,
+ const FiniteElement< 2 ,  2 > &,
+ const unsigned int);
+#endif
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(28))
+template internal::MatrixFreeFunctions::
  ShapeInfo< VectorizedArray<float,8> >::ShapeInfo(
  const Quadrature< 2 > &,
  const FiniteElement< 2 ,  2 > &,
@@ -570,140 +626,84 @@ template internal::MatrixFreeFunctions::
 #endif
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(27))
-template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,1> >::ShapeInfo(
- const Quadrature< 3 > &,
- const FiniteElement< 3 ,  3 > &,
- const unsigned int);
-
- template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,1> >::reinit(
- const Quadrature< 3 > &,
- const FiniteElement< 3 ,  3 > &,
- const unsigned int);
-
-#if  3  > 1
- template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,1> >::ShapeInfo(
- const Quadrature<1> &,
- const FiniteElement< 3 ,  3 > &,
- const unsigned int);
-
- template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,1> >::reinit(
- const Quadrature<1> &,
- const FiniteElement< 3 ,  3 > &,
- const unsigned int);
-#endif
- 
-#endif
-#if (SPLIT_INSTANTIATIONS_CHECK(28))
-template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<float,1> >::ShapeInfo(
- const Quadrature< 3 > &,
- const FiniteElement< 3 ,  3 > &,
- const unsigned int);
-
- template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,1> >::reinit(
- const Quadrature< 3 > &,
- const FiniteElement< 3 ,  3 > &,
- const unsigned int);
-
-#if  3  > 1
- template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<float,1> >::ShapeInfo(
- const Quadrature<1> &,
- const FiniteElement< 3 ,  3 > &,
- const unsigned int);
-
- template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,1> >::reinit(
- const Quadrature<1> &,
- const FiniteElement< 3 ,  3 > &,
- const unsigned int);
-#endif
- 
-#endif
 #if (SPLIT_INSTANTIATIONS_CHECK(29))
 template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,2> >::ShapeInfo(
- const Quadrature< 3 > &,
- const FiniteElement< 3 ,  3 > &,
+ ShapeInfo< VectorizedArray<double,8> >::ShapeInfo(
+ const Quadrature< 2 > &,
+ const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,2> >::reinit(
- const Quadrature< 3 > &,
- const FiniteElement< 3 ,  3 > &,
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,8> >::reinit(
+ const Quadrature< 2 > &,
+ const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
-#if  3  > 1
+#if  2  > 1
  template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,2> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<double,8> >::ShapeInfo(
  const Quadrature<1> &,
- const FiniteElement< 3 ,  3 > &,
+ const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,2> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,8> >::reinit(
  const Quadrature<1> &,
- const FiniteElement< 3 ,  3 > &,
+ const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 #endif
  
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(30))
 template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<float,4> >::ShapeInfo(
- const Quadrature< 3 > &,
- const FiniteElement< 3 ,  3 > &,
+ ShapeInfo< VectorizedArray<float,16> >::ShapeInfo(
+ const Quadrature< 2 > &,
+ const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,4> >::reinit(
- const Quadrature< 3 > &,
- const FiniteElement< 3 ,  3 > &,
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,16> >::reinit(
+ const Quadrature< 2 > &,
+ const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
-#if  3  > 1
+#if  2  > 1
  template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<float,4> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<float,16> >::ShapeInfo(
  const Quadrature<1> &,
- const FiniteElement< 3 ,  3 > &,
+ const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,4> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,16> >::reinit(
  const Quadrature<1> &,
- const FiniteElement< 3 ,  3 > &,
+ const FiniteElement< 2 ,  2 > &,
  const unsigned int);
 #endif
  
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(31))
 template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,4> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<double,1> >::ShapeInfo(
  const Quadrature< 3 > &,
  const FiniteElement< 3 ,  3 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,4> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,1> >::reinit(
  const Quadrature< 3 > &,
  const FiniteElement< 3 ,  3 > &,
  const unsigned int);
 
 #if  3  > 1
  template internal::MatrixFreeFunctions::
- ShapeInfo< VectorizedArray<double,4> >::ShapeInfo(
+ ShapeInfo< VectorizedArray<double,1> >::ShapeInfo(
  const Quadrature<1> &,
  const FiniteElement< 3 ,  3 > &,
  const unsigned int);
 
  template void
- internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,4> >::reinit(
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,1> >::reinit(
  const Quadrature<1> &,
  const FiniteElement< 3 ,  3 > &,
  const unsigned int);
@@ -712,6 +712,118 @@ template internal::MatrixFreeFunctions::
 #endif
 #if (SPLIT_INSTANTIATIONS_CHECK(32))
 template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<float,1> >::ShapeInfo(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,1> >::reinit(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+#if  3  > 1
+ template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<float,1> >::ShapeInfo(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,1> >::reinit(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+#endif
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(33))
+template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<double,2> >::ShapeInfo(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,2> >::reinit(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+#if  3  > 1
+ template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<double,2> >::ShapeInfo(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,2> >::reinit(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+#endif
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(34))
+template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<float,4> >::ShapeInfo(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,4> >::reinit(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+#if  3  > 1
+ template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<float,4> >::ShapeInfo(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,4> >::reinit(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+#endif
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(35))
+template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<double,4> >::ShapeInfo(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,4> >::reinit(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+#if  3  > 1
+ template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<double,4> >::ShapeInfo(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,4> >::reinit(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+#endif
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(36))
+template internal::MatrixFreeFunctions::
  ShapeInfo< VectorizedArray<float,8> >::ShapeInfo(
  const Quadrature< 3 > &,
  const FiniteElement< 3 ,  3 > &,
@@ -738,34 +850,100 @@ template internal::MatrixFreeFunctions::
 #endif
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(33))
+#if (SPLIT_INSTANTIATIONS_CHECK(37))
+template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<double,8> >::ShapeInfo(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,8> >::reinit(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+#if  3  > 1
+ template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<double,8> >::ShapeInfo(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<double,8> >::reinit(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+#endif
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(38))
+template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<float,16> >::ShapeInfo(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,16> >::reinit(
+ const Quadrature< 3 > &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+#if  3  > 1
+ template internal::MatrixFreeFunctions::
+ ShapeInfo< VectorizedArray<float,16> >::ShapeInfo(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+
+ template void
+ internal::MatrixFreeFunctions::ShapeInfo< VectorizedArray<float,16> >::reinit(
+ const Quadrature<1> &,
+ const FiniteElement< 3 ,  3 > &,
+ const unsigned int);
+#endif
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(39))
 template struct internal::MatrixFreeFunctions::ShapeInfo<
   VectorizedArray<double,1> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(34))
+#if (SPLIT_INSTANTIATIONS_CHECK(40))
 template struct internal::MatrixFreeFunctions::ShapeInfo<
   VectorizedArray<float,1> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(35))
+#if (SPLIT_INSTANTIATIONS_CHECK(41))
 template struct internal::MatrixFreeFunctions::ShapeInfo<
   VectorizedArray<double,2> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(36))
+#if (SPLIT_INSTANTIATIONS_CHECK(42))
 template struct internal::MatrixFreeFunctions::ShapeInfo<
   VectorizedArray<float,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(37))
+#if (SPLIT_INSTANTIATIONS_CHECK(43))
 template struct internal::MatrixFreeFunctions::ShapeInfo<
   VectorizedArray<double,4> >;
  
 #endif
-#if (SPLIT_INSTANTIATIONS_CHECK(38))
+#if (SPLIT_INSTANTIATIONS_CHECK(44))
 template struct internal::MatrixFreeFunctions::ShapeInfo<
   VectorizedArray<float,8> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(45))
+template struct internal::MatrixFreeFunctions::ShapeInfo<
+  VectorizedArray<double,8> >;
+ 
+#endif
+#if (SPLIT_INSTANTIATIONS_CHECK(46))
+template struct internal::MatrixFreeFunctions::ShapeInfo<
+  VectorizedArray<float,16> >;
  
 #endif
 
