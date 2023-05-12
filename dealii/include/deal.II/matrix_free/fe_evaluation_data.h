@@ -113,7 +113,8 @@ namespace internal
 template <int dim, typename Number, bool is_face>
 class FEEvaluationData
 {
-  using ShapeInfoType = internal::MatrixFreeFunctions::ShapeInfo<Number>;
+  using ShapeInfoType = internal::MatrixFreeFunctions::ShapeInfo<
+    typename internal::VectorizedArrayTrait<Number>::value_type>;
   using MappingInfoStorageType = internal::MatrixFreeFunctions::
     MappingInfoStorage<(is_face ? dim - 1 : dim), dim, Number>;
   using DoFInfo = internal::MatrixFreeFunctions::DoFInfo;
@@ -1501,7 +1502,8 @@ FEEvaluationData<dim, Number, is_face>::get_cell_type() const
 
 
 template <int dim, typename Number, bool is_face>
-inline const internal::MatrixFreeFunctions::ShapeInfo<Number> &
+inline const internal::MatrixFreeFunctions::ShapeInfo<
+  typename internal::VectorizedArrayTrait<Number>::value_type> &
 FEEvaluationData<dim, Number, is_face>::get_shape_info() const
 {
   Assert(data != nullptr, ExcInternalError());

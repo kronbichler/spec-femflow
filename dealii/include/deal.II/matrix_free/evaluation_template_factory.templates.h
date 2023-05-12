@@ -112,12 +112,12 @@ namespace internal
   template <int dim, typename Number>
   void
   CellwiseInverseMassFactory<dim, Number>::apply(
-    const unsigned int           n_components,
-    const unsigned int           fe_degree,
-    const AlignedVector<Number> &inverse_shape,
-    const AlignedVector<Number> &inverse_coefficients,
-    const Number *               in_array,
-    Number *                     out_array)
+    const unsigned int            n_components,
+    const unsigned int            fe_degree,
+    const AlignedVector<Number2> &inverse_shape,
+    const AlignedVector<Number> & inverse_coefficients,
+    const Number *                in_array,
+    Number *                      out_array)
   {
     instantiation_helper_run<
       1,

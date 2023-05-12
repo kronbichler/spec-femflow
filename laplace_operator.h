@@ -345,7 +345,7 @@ namespace Laplace
         n_q_points_1d,
         n_q_points_1d,
         VectorizedArrayType,
-        VectorizedArrayType>;
+        Number>;
 
       for (unsigned int cell = cell_range.first; cell < cell_range.second;
            ++cell)
@@ -356,7 +356,7 @@ namespace Laplace
 
           const auto &               v = cell_quadratic_coefficients[cell];
           VectorizedArrayType *      phi_grads = phi.begin_gradients();
-          const VectorizedArrayType *shape_grads =
+          const Number *shape_grads =
             phi.get_shape_info().data[0].shape_gradients_collocation_eo.begin();
           if (dim == 2)
             {
@@ -457,7 +457,7 @@ namespace Laplace
                     n_q_points_1d,
                     n_q_points_1d,
                     VectorizedArrayType,
-                    VectorizedArrayType>;
+                    Number>;
                   for (unsigned int c = 0; c < n_components; ++c)
                     {
                       Eval2::template apply<1, true, false, 1>(

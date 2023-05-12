@@ -466,7 +466,7 @@ namespace internal
     AssertIndexRange(face_direction, dim);
     constexpr int in_stride  = Utilities::pow(n_rows, face_direction);
     constexpr int out_stride = Utilities::pow(n_rows, dim - 1);
-    const Number *DEAL_II_RESTRICT shape_values = this->shape_values;
+    const Number2 *DEAL_II_RESTRICT shape_values = this->shape_values;
 
     for (int i2 = 0; i2 < n_blocks2; ++i2)
       {
@@ -1654,26 +1654,26 @@ namespace internal
                   {
                     if (contract_over_rows == true)
                       {
-                        r0 = shapes[col][0] * xp[0];
-                        r1 = shapes[(n_rows - 1) * offset + col][0] * xm[0];
+                        r0 = shapes[col] * xp[0];
+                        r1 = shapes[(n_rows - 1) * offset + col] * xm[0];
                       }
                     else
                       {
-                        r0 = shapes[col * offset][0] * xp[0];
-                        r1 = shapes[(n_rows - 1 - col) * offset][0] * xm[0];
+                        r0 = shapes[col * offset] * xp[0];
+                        r1 = shapes[(n_rows - 1 - col) * offset] * xm[0];
                       }
                     for (int ind = 1; ind < mid; ++ind)
                       {
                         if (contract_over_rows == true)
                           {
-                            r0 += shapes[ind * offset + col][0] * xp[ind];
-                            r1 += shapes[(n_rows - 1 - ind) * offset + col][0] *
+                            r0 += shapes[ind * offset + col] * xp[ind];
+                            r1 += shapes[(n_rows - 1 - ind) * offset + col] *
                                   xm[ind];
                           }
                         else
                           {
-                            r0 += shapes[col * offset + ind][0] * xp[ind];
-                            r1 += shapes[(n_rows - 1 - col) * offset + ind][0] *
+                            r0 += shapes[col * offset + ind] * xp[ind];
+                            r1 += shapes[(n_rows - 1 - col) * offset + ind] *
                                   xm[ind];
                           }
                       }
@@ -1683,12 +1683,12 @@ namespace internal
                 if (mm % 2 == 1 && contract_over_rows == true)
                   {
                     if (type == 1)
-                      r1 += shapes[mid * offset + col][0] * xmid;
+                      r1 += shapes[mid * offset + col] * xmid;
                     else
-                      r0 += shapes[mid * offset + col][0] * xmid;
+                      r0 += shapes[mid * offset + col] * xmid;
                   }
                 else if (mm % 2 == 1 && (nn % 2 == 0 || type > 0 || mm == 3))
-                  r0 += shapes[col * offset + mid][0] * xmid;
+                  r0 += shapes[col * offset + mid] * xmid;
 
                 if (add)
                   {
@@ -1711,23 +1711,23 @@ namespace internal
                 mm % 2 == 1 && mm > 3)
               {
                 if (add)
-                  out[stride * n_cols] += shapes[mid * offset + n_cols][0] * xmid;
+                  out[stride * n_cols] += shapes[mid * offset + n_cols] * xmid;
                 else
-                  out[stride * n_cols] = shapes[mid * offset + n_cols][0] * xmid;
+                  out[stride * n_cols] = shapes[mid * offset + n_cols] * xmid;
               }
             else if (contract_over_rows == true && nn % 2 == 1)
               {
                 Number r0;
                 if (mid > 0)
                   {
-                    r0 = shapes[n_cols][0] * xp[0];
+                    r0 = shapes[n_cols] * xp[0];
                     for (int ind = 1; ind < mid; ++ind)
-                      r0 += shapes[ind * offset + n_cols][0] * xp[ind];
+                      r0 += shapes[ind * offset + n_cols] * xp[ind];
                   }
                 else
                   r0 = Number();
                 if (type != 1 && mm % 2 == 1)
-                  r0 += shapes[mid * offset + n_cols][0] * xmid;
+                  r0 += shapes[mid * offset + n_cols] * xmid;
 
                 if (add)
                   out[stride * n_cols] += r0;
@@ -1741,22 +1741,22 @@ namespace internal
                   {
                     if (type == 1)
                       {
-                        r0 = shapes[n_cols * offset][0] * xm[0];
+                        r0 = shapes[n_cols * offset] * xm[0];
                         for (int ind = 1; ind < mid; ++ind)
-                          r0 += shapes[n_cols * offset + ind][0] * xm[ind];
+                          r0 += shapes[n_cols * offset + ind] * xm[ind];
                       }
                     else
                       {
-                        r0 = shapes[n_cols * offset][0] * xp[0];
+                        r0 = shapes[n_cols * offset] * xp[0];
                         for (int ind = 1; ind < mid; ++ind)
-                          r0 += shapes[n_cols * offset + ind][0] * xp[ind];
+                          r0 += shapes[n_cols * offset + ind] * xp[ind];
                       }
                   }
                 else
                   r0 = Number();
 
                 if ((type == 0 || type == 2) && mm % 2 == 1)
-                  r0 += shapes[n_cols * offset + mid][0] * xmid;
+                  r0 += shapes[n_cols * offset + mid] * xmid;
 
                 if (add)
                   out[stride * n_cols] += r0;
@@ -2799,7 +2799,7 @@ namespace internal
                                                           n_rows)));
     constexpr int out_stride = n_blocks1 * n_blocks2;
 
-    const Number *DEAL_II_RESTRICT shape_values = this->shape_values;
+    const Number2 *DEAL_II_RESTRICT shape_values = this->shape_values;
 
     for (int i2 = 0; i2 < n_blocks2; ++i2)
       {
@@ -3488,10 +3488,10 @@ namespace internal
         constexpr unsigned int         array_size = length > 0 ? length : 1;
         std::array<Number, array_size> shape_values_x;
         std::array<Number, array_size> shape_derivs_x;
-        for (unsigned int i = 0; i < array_size; ++i)
+        for (unsigned int j = 0; j < array_size; ++j)
           {
-            shape_values_x[i] = shapes[i][0][0];
-            shape_derivs_x[i] = shapes[i][1][0];
+            shape_values_x[j] = shapes[j][0][0];
+            shape_derivs_x[j] = shapes[j][1][0];
           }
         for (unsigned int i1 = 0; i1 < (dim > 1 ? length : 1); ++i1)
           {

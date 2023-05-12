@@ -1099,12 +1099,12 @@ FEPointEvaluation<n_components, dim, spacedim, Number>::integrate(
           internal::compute_values_of_array(shapes.data(),
                                             poly,
                                             vectorized_points);
-          internal::integrate_add_tensor_product_value_and_gradient_shapes
-            (shapes.data(),
-             poly.size(),
-             value,
-             gradient,
-             solution_renumbered_vectorized);
+          internal::integrate_add_tensor_product_value_and_gradient_shapes(
+            shapes.data(),
+            poly.size(),
+            value,
+            gradient,
+            solution_renumbered_vectorized);
         }
 
       // add between the lanes and write into the result

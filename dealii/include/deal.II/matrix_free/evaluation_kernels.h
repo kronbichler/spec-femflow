@@ -118,12 +118,14 @@ namespace internal
   {
     static const EvaluatorVariant variant =
       EvaluatorSelector<type, (fe_degree + n_q_points_1d > 4)>::variant;
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
 
     using Eval = EvaluatorTensorProduct<variant,
                                         dim,
                                         fe_degree + 1,
                                         n_q_points_1d,
-                                        Number>;
+                                        Number,
+                                        Number2>;
 
     static void
     evaluate(const unsigned int                     n_components,
@@ -138,9 +140,10 @@ namespace internal
               FEEvaluationData<dim, Number, false> & fe_eval,
               const bool                             add_into_values_array);
 
+    template <typename Number2>
     static Eval
     create_evaluator_tensor_product(
-      const MatrixFreeFunctions::UnivariateShapeData<Number>
+      const MatrixFreeFunctions::UnivariateShapeData<Number2>
         *univariate_shape_data)
     {
       if (variant == evaluate_evenodd)
@@ -205,10 +208,10 @@ namespace internal
       const bool                             add_into_values_array = false);
 
   private:
-    template <typename EvalType>
+    template <typename EvalType, typename Number2>
     static EvalType
     create_evaluator_tensor_product(
-      const MatrixFreeFunctions::UnivariateShapeData<Number> &shape_data)
+      const MatrixFreeFunctions::UnivariateShapeData<Number2> &shape_data)
     {
       return EvalType(shape_data.shape_values,
                       shape_data.shape_gradients,
@@ -251,7 +254,8 @@ namespace internal
     if (evaluation_flag == EvaluationFlags::nothing)
       return;
 
-    std::array<const MatrixFreeFunctions::UnivariateShapeData<Number> *, 3>
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
+    std::array<const MatrixFreeFunctions::UnivariateShapeData<Number2> *, 3>
       univariate_shape_data;
 
     const auto &shape_data = fe_eval.get_shape_info().data;
@@ -522,7 +526,8 @@ namespace internal
     FEEvaluationData<dim, Number, false> & fe_eval,
     const bool                             add_into_values_array)
   {
-    std::array<const MatrixFreeFunctions::UnivariateShapeData<Number> *, 3>
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
+    std::array<const MatrixFreeFunctions::UnivariateShapeData<Number2> *, 3>
       univariate_shape_data;
 
     const auto &shape_data = fe_eval.get_shape_info().data;
@@ -841,8 +846,9 @@ namespace internal
 
     const auto &shape_data = fe_eval.get_shape_info().data;
 
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
     using Eval =
-      EvaluatorTensorProduct<evaluate_general, 1, 0, 0, Number, Number>;
+      EvaluatorTensorProduct<evaluate_general, 1, 0, 0, Number, Number2>;
 
     if (evaluation_flag & EvaluationFlags::values)
       {
@@ -915,8 +921,9 @@ namespace internal
 
     const auto &shape_data = fe_eval.get_shape_info().data;
 
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
     using Eval =
-      EvaluatorTensorProduct<evaluate_general, 1, 0, 0, Number, Number>;
+      EvaluatorTensorProduct<evaluate_general, 1, 0, 0, Number, Number2>;
 
     if (integration_flag & EvaluationFlags::values)
       {
@@ -1036,13 +1043,15 @@ namespace internal
   {
     (void)add_into_values_array;
 
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
     using EvalNormal =
       EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
                                         dim,
                                         (fe_degree == -1) ? 1 : fe_degree + 1,
                                         n_q_points_1d,
                                         Number,
-                                        normal_dir>;
+                                        normal_dir,
+                                        Number2>;
 
     using EvalTangent =
       EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
@@ -1050,7 +1059,8 @@ namespace internal
                                         (fe_degree == -1) ? 1 : fe_degree,
                                         n_q_points_1d,
                                         Number,
-                                        normal_dir>;
+                                        normal_dir,
+                                        Number2>;
     using Eval0 =
       typename std::conditional<normal_dir == 0, EvalNormal, EvalTangent>::type;
     using Eval1 =
@@ -1058,9 +1068,8 @@ namespace internal
     using Eval2 =
       typename std::conditional<normal_dir == 2, EvalNormal, EvalTangent>::type;
 
-    const MatrixFreeFunctions::ShapeInfo<Number> &shape_info =
-      fe_eval.get_shape_info();
-    Eval0 eval0 = create_evaluator_tensor_product<Eval0>(
+    const auto &shape_info = fe_eval.get_shape_info();
+    Eval0       eval0      = create_evaluator_tensor_product<Eval0>(
       ((normal_dir == 0) ? shape_info.data[0] : shape_info.data[1]));
     Eval1 eval1 = create_evaluator_tensor_product<Eval1>(
       ((normal_dir == 1) ? shape_info.data[0] : shape_info.data[1]));
@@ -1229,13 +1238,15 @@ namespace internal
       const bool                             add_into_values_array,
       std::integral_constant<bool, true>)
   {
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
     using EvalNormal =
       EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
                                         dim,
                                         (fe_degree == -1) ? 1 : fe_degree + 1,
                                         n_q_points_1d,
                                         Number,
-                                        normal_dir>;
+                                        normal_dir,
+                                        Number2>;
 
     using EvalTangent =
       EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
@@ -1243,7 +1254,8 @@ namespace internal
                                         (fe_degree == -1) ? 1 : fe_degree,
                                         n_q_points_1d,
                                         Number,
-                                        normal_dir>;
+                                        normal_dir,
+                                        Number2>;
     using Eval0 =
       typename std::conditional<normal_dir == 0, EvalNormal, EvalTangent>::type;
     using Eval1 =
@@ -1251,9 +1263,8 @@ namespace internal
     using Eval2 =
       typename std::conditional<normal_dir == 2, EvalNormal, EvalTangent>::type;
 
-    const MatrixFreeFunctions::ShapeInfo<Number> &shape_info =
-      fe_eval.get_shape_info();
-    Eval0 eval0 = create_evaluator_tensor_product<Eval0>(
+    const auto &shape_info = fe_eval.get_shape_info();
+    Eval0       eval0      = create_evaluator_tensor_product<Eval0>(
       ((normal_dir == 0) ? shape_info.data[0] : shape_info.data[1]));
     Eval1 eval1 = create_evaluator_tensor_product<Eval1>(
       ((normal_dir == 1) ? shape_info.data[0] : shape_info.data[1]));
@@ -1431,9 +1442,7 @@ namespace internal
             EvaluatorQuantity quantity,
             int               dim,
             int               basis_size_1,
-            int               basis_size_2,
-            typename Number,
-            typename Number2>
+            int               basis_size_2>
   struct FEEvaluationImplBasisChange
   {
     static_assert(basis_size_1 == 0 || basis_size_1 <= basis_size_2,
@@ -1461,17 +1470,19 @@ namespace internal
      * is zero, the size of the second basis can alternatively be passed in as a
      * run time argument.
      */
+    template <typename Number, typename Number2>
 #ifndef DEBUG
     DEAL_II_ALWAYS_INLINE
 #endif
-    static void
-    do_forward(
-      const unsigned int            n_components,
-      const AlignedVector<Number2> &transformation_matrix,
-      const Number *                values_in,
-      Number *                      values_out,
-      const unsigned int basis_size_1_variable = numbers::invalid_unsigned_int,
-      const unsigned int basis_size_2_variable = numbers::invalid_unsigned_int)
+      static void
+      do_forward(const unsigned int            n_components,
+                 const AlignedVector<Number2> &transformation_matrix,
+                 const Number *                values_in,
+                 Number *                      values_out,
+                 const unsigned int            basis_size_1_variable =
+                   numbers::invalid_unsigned_int,
+                 const unsigned int basis_size_2_variable =
+                   numbers::invalid_unsigned_int)
     {
       Assert(
         basis_size_1 != 0 || basis_size_1_variable <= basis_size_2_variable,
@@ -1496,8 +1507,8 @@ namespace internal
                              Number,
                              Number2>
                          eval_val(transformation_matrix,
-                 AlignedVector<Number2>(),
-                 AlignedVector<Number2>(),
+                 {},
+                 {},
                  basis_size_1_variable,
                  basis_size_2_variable);
       const unsigned int np_1 =
@@ -1520,23 +1531,19 @@ namespace internal
           values_out -= Utilities::fixed_power<dim>(np_2);
           if (next_dim < dim)
             for (unsigned int q = np_1; q != 0; --q)
-              FEEvaluationImplBasisChange<
-                variant,
-                quantity,
-                next_dim,
-                basis_size_1,
-                basis_size_2,
-                Number,
-                Number2>::do_forward(1,
-                                     transformation_matrix,
-                                     values_in +
-                                       (q - 1) *
-                                         Utilities::fixed_power<next_dim>(np_1),
-                                     values_out +
-                                       (q - 1) *
-                                         Utilities::fixed_power<next_dim>(np_2),
-                                     basis_size_1_variable,
-                                     basis_size_2_variable);
+              FEEvaluationImplBasisChange<variant,
+                                          quantity,
+                                          next_dim,
+                                          basis_size_1,
+                                          basis_size_2>::
+                do_forward(1,
+                           transformation_matrix,
+                           values_in +
+                             (q - 1) * Utilities::fixed_power<next_dim>(np_1),
+                           values_out +
+                             (q - 1) * Utilities::fixed_power<next_dim>(np_2),
+                           basis_size_1_variable,
+                           basis_size_2_variable);
 
           // the recursion stops if dim==1 or if dim==2 and
           // basis_size_1==basis_size_2 (the latter is used because the
@@ -1585,18 +1592,20 @@ namespace internal
      * is zero, the size of the second basis can alternatively be passed in as a
      * run time argument.
      */
+    template <typename Number, typename Number2>
 #ifndef DEBUG
     DEAL_II_ALWAYS_INLINE
 #endif
-    static void
-    do_backward(
-      const unsigned int            n_components,
-      const AlignedVector<Number2> &transformation_matrix,
-      const bool                    add_into_result,
-      Number *                      values_in,
-      Number *                      values_out,
-      const unsigned int basis_size_1_variable = numbers::invalid_unsigned_int,
-      const unsigned int basis_size_2_variable = numbers::invalid_unsigned_int)
+      static void
+      do_backward(const unsigned int            n_components,
+                  const AlignedVector<Number2> &transformation_matrix,
+                  const bool                    add_into_result,
+                  Number *                      values_in,
+                  Number *                      values_out,
+                  const unsigned int            basis_size_1_variable =
+                    numbers::invalid_unsigned_int,
+                  const unsigned int basis_size_2_variable =
+                    numbers::invalid_unsigned_int)
     {
       Assert(
         basis_size_1 != 0 || basis_size_1_variable <= basis_size_2_variable,
@@ -1700,9 +1709,7 @@ namespace internal
                                           quantity,
                                           next_dim,
                                           basis_size_1,
-                                          basis_size_2,
-                                          Number,
-                                          Number2>::
+                                          basis_size_2>::
                 do_backward(1,
                             transformation_matrix,
                             add_into_result,
@@ -1738,6 +1745,7 @@ namespace internal
      *                     of the transformation are stored. It may alias with
      *                     the values_in array.
      */
+    template <typename Number, typename Number2>
     static void
     do_mass(const unsigned int            n_components,
             const AlignedVector<Number2> &transformation_matrix,
@@ -1763,16 +1771,14 @@ namespace internal
           EvaluatorQuantity::value,
           next_dim,
           basis_size_1,
-          basis_size_2,
-          Number,
-          Number2>::do_forward(n_components,
-                               transformation_matrix,
-                               values_in +
-                                 (q - 1) *
-                                   Utilities::pow(basis_size_1, dim - 1),
-                               my_scratch +
-                                 (q - 1) *
-                                   Utilities::pow(basis_size_2, dim - 1));
+          basis_size_2>::do_forward(n_components,
+                                    transformation_matrix,
+                                    values_in +
+                                      (q - 1) *
+                                        Utilities::pow(basis_size_1, dim - 1),
+                                    my_scratch +
+                                      (q - 1) *
+                                        Utilities::pow(basis_size_2, dim - 1));
       EvaluatorTensorProduct<variant,
                              dim,
                              basis_size_1,
@@ -1799,20 +1805,16 @@ namespace internal
                 my_scratch + i, my_scratch + i);
           }
       for (unsigned int q = 0; q < basis_size_1; ++q)
-        FEEvaluationImplBasisChange<
-          variant,
-          EvaluatorQuantity::value,
-          next_dim,
-          basis_size_1,
-          basis_size_2,
-          Number,
-          Number2>::do_backward(n_components,
-                                transformation_matrix,
-                                false,
-                                my_scratch +
-                                  q * Utilities::pow(basis_size_2, dim - 1),
-                                values_out +
-                                  q * Utilities::pow(basis_size_1, dim - 1));
+        FEEvaluationImplBasisChange<variant,
+                                    EvaluatorQuantity::value,
+                                    next_dim,
+                                    basis_size_1,
+                                    basis_size_2>::
+          do_backward(n_components,
+                      transformation_matrix,
+                      false,
+                      my_scratch + q * Utilities::pow(basis_size_2, dim - 1),
+                      values_out + q * Utilities::pow(basis_size_1, dim - 1));
     }
   };
 
@@ -1839,8 +1841,9 @@ namespace internal
              const Number *                         values_dofs,
              FEEvaluationData<dim, Number, false> & fe_eval);
 
+    template <typename Number2>
     static void
-    do_evaluate(const MatrixFreeFunctions::UnivariateShapeData<Number> &shape,
+    do_evaluate(const MatrixFreeFunctions::UnivariateShapeData<Number2> &shape,
                 const EvaluationFlags::EvaluationFlags evaluation_flag,
                 const Number *                         values_dofs,
                 Number *                               gradients_quad,
@@ -1853,8 +1856,9 @@ namespace internal
               FEEvaluationData<dim, Number, false> & fe_eval,
               const bool                             add_into_values_array);
 
+    template <typename Number2>
     static void
-    do_integrate(const MatrixFreeFunctions::UnivariateShapeData<Number> &shape,
+    do_integrate(const MatrixFreeFunctions::UnivariateShapeData<Number2> &shape,
                  const EvaluationFlags::EvaluationFlags integration_flag,
                  Number *                               values_dofs,
                  Number *                               gradients_quad,
@@ -1893,13 +1897,14 @@ namespace internal
 
 
   template <int dim, int fe_degree, typename Number>
+  template <typename Number2>
   inline void
   FEEvaluationImplCollocation<dim, fe_degree, Number>::do_evaluate(
-    const MatrixFreeFunctions::UnivariateShapeData<Number> &shape,
-    const EvaluationFlags::EvaluationFlags                  evaluation_flag,
-    const Number *                                          values_dofs,
-    Number *                                                gradients_quad,
-    Number *                                                hessians_quad)
+    const MatrixFreeFunctions::UnivariateShapeData<Number2> &shape,
+    const EvaluationFlags::EvaluationFlags                   evaluation_flag,
+    const Number *                                           values_dofs,
+    Number *                                                 gradients_quad,
+    Number *                                                 hessians_quad)
   {
     AssertDimension(shape.shape_gradients_collocation_eo.size(),
                     (fe_degree + 2) / 2 * (fe_degree + 1));
@@ -1909,8 +1914,9 @@ namespace internal
                            dim,
                            fe_degree + 1,
                            fe_degree + 1,
-                           Number>
-      eval(AlignedVector<Number>(),
+                           Number,
+                           Number2>
+      eval({},
            shape.shape_gradients_collocation_eo,
            shape.shape_hessians_collocation_eo);
     if ((evaluation_flag &
@@ -1992,13 +1998,14 @@ namespace internal
 
 
   template <int dim, int fe_degree, typename Number>
+  template <typename Number2>
   inline void
   FEEvaluationImplCollocation<dim, fe_degree, Number>::do_integrate(
-    const MatrixFreeFunctions::UnivariateShapeData<Number> &shape,
-    const EvaluationFlags::EvaluationFlags                  integration_flag,
-    Number *                                                values_dofs,
-    Number *                                                gradients_quad,
-    const Number *                                          hessians_quad,
+    const MatrixFreeFunctions::UnivariateShapeData<Number2> &shape,
+    const EvaluationFlags::EvaluationFlags                   integration_flag,
+    Number *                                                 values_dofs,
+    Number *                                                 gradients_quad,
+    const Number *                                           hessians_quad,
     const bool add_into_values_array)
   {
     AssertDimension(shape.shape_gradients_collocation_eo.size(),
@@ -2008,8 +2015,9 @@ namespace internal
                            dim,
                            fe_degree + 1,
                            fe_degree + 1,
-                           Number>
-                          eval(AlignedVector<Number>(),
+                           Number,
+                           Number2>
+                          eval({},
            shape.shape_gradients_collocation_eo,
            shape.shape_hessians_collocation_eo);
     constexpr std::size_t n_points = Utilities::pow(fe_degree + 1, dim);
@@ -2153,12 +2161,10 @@ namespace internal
           EvaluatorQuantity::value,
           dim,
           (fe_degree >= n_q_points_1d ? n_q_points_1d : fe_degree + 1),
-          n_q_points_1d,
-          Number,
-          Number>::do_forward(1,
-                              shape_data.shape_values_eo,
-                              values_dofs + c * n_dofs,
-                              fe_eval.begin_values() + c * n_q_points);
+          n_q_points_1d>::do_forward(1,
+                                     shape_data.shape_values_eo,
+                                     values_dofs + c * n_dofs,
+                                     fe_eval.begin_values() + c * n_q_points);
 
         // apply derivatives in the collocation space
         if (evaluation_flag &
@@ -2219,14 +2225,12 @@ namespace internal
           EvaluatorQuantity::value,
           dim,
           (fe_degree >= n_q_points_1d ? n_q_points_1d : fe_degree + 1),
-          n_q_points_1d,
-          Number,
-          Number>::do_backward(1,
-                               shape_data.shape_values_eo,
-                               add_into_values_array,
-                               fe_eval.begin_values() + c * n_q_points,
-                               values_dofs +
-                                 c * Utilities::pow(fe_degree + 1, dim));
+          n_q_points_1d>::do_backward(1,
+                                      shape_data.shape_values_eo,
+                                      add_into_values_array,
+                                      fe_eval.begin_values() + c * n_q_points,
+                                      values_dofs +
+                                        c * Utilities::pow(fe_degree + 1, dim));
       }
   }
 
@@ -2532,18 +2536,20 @@ namespace internal
     // choice in terms of operation counts (third condition) and if we were
     // able to initialize the fields in shape_info.templates.h from the
     // polynomials (fourth condition).
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
     using Eval = EvaluatorTensorProduct<symmetric_evaluate ? evaluate_evenodd :
                                                              evaluate_general,
                                         dim - 1,
                                         fe_degree + 1,
                                         n_q_points_1d,
-                                        Number>;
+                                        Number,
+                                        Number2>;
 
     static Eval
     create_evaluator_tensor_product(
-      const MatrixFreeFunctions::UnivariateShapeData<Number> &data,
-      const unsigned int                                      subface_index,
-      const unsigned int                                      direction)
+      const MatrixFreeFunctions::UnivariateShapeData<Number2> &data,
+      const unsigned int                                       subface_index,
+      const unsigned int                                       direction)
     {
       if (symmetric_evaluate)
         return Eval(data.shape_values_eo,
@@ -2571,15 +2577,15 @@ namespace internal
 
     static void
     evaluate_in_face(
-      const unsigned int                                      n_components,
-      const EvaluationFlags::EvaluationFlags                  evaluation_flag,
-      const MatrixFreeFunctions::UnivariateShapeData<Number> &data,
-      Number *                                                values_dofs,
-      Number *                                                values_quad,
-      Number *                                                gradients_quad,
-      Number *                                                hessians_quad,
-      Number *                                                scratch_data,
-      const unsigned int                                      subface_index)
+      const unsigned int                                       n_components,
+      const EvaluationFlags::EvaluationFlags                   evaluation_flag,
+      const MatrixFreeFunctions::UnivariateShapeData<Number2> &data,
+      Number *                                                 values_dofs,
+      Number *                                                 values_quad,
+      Number *                                                 gradients_quad,
+      Number *                                                 hessians_quad,
+      Number *                                                 scratch_data,
+      const unsigned int                                       subface_index)
     {
       Eval eval0 = create_evaluator_tensor_product(data, subface_index, 0);
       Eval eval1 = create_evaluator_tensor_product(data, subface_index, 1);
@@ -2638,10 +2644,9 @@ namespace internal
                                              dim - 1,
                                              n_q_points_1d,
                                              n_q_points_1d,
-                                             Number>
-                        eval_grad(AlignedVector<Number>(),
-                                  data.shape_gradients_collocation_eo,
-                                  AlignedVector<Number>());
+                                             Number,
+                                             Number2>
+                        eval_grad({}, data.shape_gradients_collocation_eo, {});
                       eval_grad.template gradients<0, true, false>(
                         values_quad, gradients_quad);
                       eval_grad.template gradients<1, true, false>(
@@ -2772,15 +2777,15 @@ namespace internal
 
     static void
     integrate_in_face(
-      const unsigned int                                      n_components,
-      const EvaluationFlags::EvaluationFlags                  integration_flag,
-      const MatrixFreeFunctions::UnivariateShapeData<Number> &data,
-      Number *                                                values_dofs,
-      Number *                                                values_quad,
-      Number *                                                gradients_quad,
-      Number *                                                hessians_quad,
-      Number *                                                scratch_data,
-      const unsigned int                                      subface_index)
+      const unsigned int                                       n_components,
+      const EvaluationFlags::EvaluationFlags                   integration_flag,
+      const MatrixFreeFunctions::UnivariateShapeData<Number2> &data,
+      Number *                                                 values_dofs,
+      Number *                                                 values_quad,
+      Number *                                                 gradients_quad,
+      Number *                                                 hessians_quad,
+      Number *                                                 scratch_data,
+      const unsigned int                                       subface_index)
     {
       Eval eval0 = create_evaluator_tensor_product(data, subface_index, 0);
       Eval eval1 = create_evaluator_tensor_product(data, subface_index, 1);
@@ -2842,10 +2847,9 @@ namespace internal
                                              dim - 1,
                                              n_q_points_1d,
                                              n_q_points_1d,
-                                             Number>
-                        eval_grad(AlignedVector<Number>(),
-                                  data.shape_gradients_collocation_eo,
-                                  AlignedVector<Number>());
+                                             Number,
+                                             Number2>
+                        eval_grad({}, data.shape_gradients_collocation_eo, {});
                       if ((integration_flag & EvaluationFlags::values) != 0u)
                         eval_grad.template gradients<1, false, true>(
                           gradients_quad + n_q_points, values_quad);
@@ -3008,17 +3012,19 @@ namespace internal
   template <int dim, int fe_degree, int n_q_points_1d, typename Number>
   struct FEFaceEvaluationImplRaviartThomas
   {
-    using EvalGeneral = EvaluatorTensorProduct<evaluate_general,
-                                               dim - 1,
-                                               fe_degree,
-                                               n_q_points_1d,
-                                               Number>;
-    template <typename EvalType>
+    using EvalGeneral =
+      EvaluatorTensorProduct<evaluate_general,
+                             dim - 1,
+                             fe_degree,
+                             n_q_points_1d,
+                             Number,
+                             typename VectorizedArrayTrait<Number>::value_type>;
+    template <typename EvalType, typename Number2>
     static EvalType
     create_evaluator_tensor_product(
-      const MatrixFreeFunctions::UnivariateShapeData<Number> &data,
-      const unsigned int                                      subface_index,
-      const unsigned int                                      direction)
+      const MatrixFreeFunctions::UnivariateShapeData<Number2> &data,
+      const unsigned int                                       subface_index,
+      const unsigned int                                       direction)
     {
       if (subface_index >= GeometryInfo<dim>::max_children_per_cell)
         return EvalType(data.shape_values,
@@ -3109,20 +3115,23 @@ namespace internal
       const unsigned int                     subface_index,
       std::integral_constant<bool, false>)
     {
+      using Number2 = typename VectorizedArrayTrait<Number>::value_type;
       using EvalNormal =
         EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
                                           dim - 1,
                                           (fe_degree == -1) ? 1 : fe_degree + 1,
                                           n_q_points_1d,
                                           Number,
-                                          normal_dir>;
+                                          normal_dir,
+                                          Number2>;
       using EvalTangent =
         EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
                                           dim - 1,
                                           (fe_degree == -1) ? 1 : fe_degree,
                                           n_q_points_1d,
                                           Number,
-                                          normal_dir>;
+                                          normal_dir,
+                                          Number2>;
 
       using TempEval0 = typename std::
         conditional<normal_dir == 0, EvalNormal, EvalTangent>::type;
@@ -3133,9 +3142,8 @@ namespace internal
       using Eval1 = typename std::
         conditional<normal_dir == 2, EvalGeneral, TempEval1>::type;
 
-      const MatrixFreeFunctions::ShapeInfo<Number> &shape_info =
-        fe_eval.get_shape_info();
-      Eval0 eval0 = create_evaluator_tensor_product<Eval0>(
+      const auto &shape_info = fe_eval.get_shape_info();
+      Eval0       eval0      = create_evaluator_tensor_product<Eval0>(
         ((normal_dir == 0) ? shape_info.data[0] : shape_info.data[1]),
         subface_index,
         0);
@@ -3313,20 +3321,23 @@ namespace internal
       const unsigned int                     subface_index,
       std::integral_constant<bool, true>)
     {
+      using Number2 = typename VectorizedArrayTrait<Number>::value_type;
       using EvalNormal =
         EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
                                           dim - 1,
                                           (fe_degree == -1) ? 1 : fe_degree + 1,
                                           n_q_points_1d,
                                           Number,
-                                          normal_dir>;
+                                          normal_dir,
+                                          Number2>;
       using EvalTangent =
         EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
                                           dim - 1,
                                           (fe_degree == -1) ? 1 : fe_degree,
                                           n_q_points_1d,
                                           Number,
-                                          normal_dir>;
+                                          normal_dir,
+                                          Number2>;
 
       using TempEval0 = typename std::
         conditional<normal_dir == 0, EvalNormal, EvalTangent>::type;
@@ -3337,9 +3348,8 @@ namespace internal
       using Eval1 = typename std::
         conditional<normal_dir == 2, EvalGeneral, TempEval1>::type;
 
-      const MatrixFreeFunctions::ShapeInfo<Number> &shape_info =
-        fe_eval.get_shape_info();
-      Eval0 eval0 = create_evaluator_tensor_product<Eval0>(
+      const auto &shape_info = fe_eval.get_shape_info();
+      Eval0       eval0      = create_evaluator_tensor_product<Eval0>(
         ((normal_dir == 0) ? shape_info.data[0] : shape_info.data[1]),
         subface_index,
         0);
@@ -3541,14 +3551,16 @@ namespace internal
   template <int dim, int fe_degree, typename Number>
   struct FEFaceNormalEvaluationImpl
   {
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
+
     template <bool do_evaluate, bool add_into_output>
     static void
-    interpolate(const unsigned int                            n_components,
-                const EvaluationFlags::EvaluationFlags        flags,
-                const MatrixFreeFunctions::ShapeInfo<Number> &shape_info,
-                const Number *                                input,
-                Number *                                      output,
-                const unsigned int                            face_no)
+    interpolate(const unsigned int                             n_components,
+                const EvaluationFlags::EvaluationFlags         flags,
+                const MatrixFreeFunctions::ShapeInfo<Number2> &shape_info,
+                const Number *                                 input,
+                Number *                                       output,
+                const unsigned int                             face_no)
     {
       Assert(static_cast<unsigned int>(fe_degree) ==
                  shape_info.data.front().fe_degree ||
@@ -3576,12 +3588,12 @@ namespace internal
     template <bool do_evaluate, bool add_into_output>
     static void
     interpolate_quadrature(
-      const unsigned int                            n_components,
-      const EvaluationFlags::EvaluationFlags        flags,
-      const MatrixFreeFunctions::ShapeInfo<Number> &shape_info,
-      const Number *                                input,
-      Number *                                      output,
-      const unsigned int                            face_no)
+      const unsigned int                             n_components,
+      const EvaluationFlags::EvaluationFlags         flags,
+      const MatrixFreeFunctions::ShapeInfo<Number2> &shape_info,
+      const Number *                                 input,
+      Number *                                       output,
+      const unsigned int                             face_no)
     {
       Assert(static_cast<unsigned int>(fe_degree + 1) ==
                  shape_info.data.front().n_q_points_1d ||
@@ -3609,7 +3621,7 @@ namespace internal
                         const EvaluationFlags::EvaluationFlags flag,
                         const unsigned int                     face_no,
                         const unsigned int                     n_points_1d,
-                        const std::array<AlignedVector<Number>, 2> &shape_data,
+                        const std::array<AlignedVector<Number2>, 2> &shape_data,
                         const unsigned int dofs_per_component_on_cell,
                         const unsigned int dofs_per_component_on_face)
     {
@@ -3619,12 +3631,9 @@ namespace internal
                                  dim,
                                  fe_degree + 1,
                                  0,
-                                 Number>
-            evalf(shape_data[face_no % 2],
-                  AlignedVector<Number>(),
-                  AlignedVector<Number>(),
-                  n_points_1d,
-                  0);
+                                 Number,
+                                 Number2>
+            evalf(shape_data[face_no % 2], {}, {}, n_points_1d, 0);
 
           const unsigned int in_stride  = do_evaluate ?
                                             dofs_per_component_on_cell :
@@ -3674,12 +3683,10 @@ namespace internal
     template <typename EvalType>
     static EvalType
     create_evaluator_tensor_product(
-      const MatrixFreeFunctions::UnivariateShapeData<Number> &data,
-      const unsigned int                                      face_no)
+      const MatrixFreeFunctions::UnivariateShapeData<Number2> &data,
+      const unsigned int                                       face_no)
     {
-      return EvalType(data.shape_data_on_face[face_no % 2],
-                      AlignedVector<Number>(),
-                      AlignedVector<Number>());
+      return EvalType(data.shape_data_on_face[face_no % 2], {}, {});
     }
 
     template <bool do_evaluate,
@@ -3688,12 +3695,12 @@ namespace internal
               int  max_derivative = 0>
     static void
     interpolate_generic_raviart_thomas(
-      const unsigned int                            n_components,
-      const Number *                                input,
-      Number *                                      output,
-      const EvaluationFlags::EvaluationFlags        flag,
-      const unsigned int                            face_no,
-      const MatrixFreeFunctions::ShapeInfo<Number> &shape_info)
+      const unsigned int                             n_components,
+      const Number *                                 input,
+      Number *                                       output,
+      const EvaluationFlags::EvaluationFlags         flag,
+      const unsigned int                             face_no,
+      const MatrixFreeFunctions::ShapeInfo<Number2> &shape_info)
     {
       if (dim == 1)
         {
@@ -3756,10 +3763,10 @@ namespace internal
               int  max_derivative>
     static inline void
     interpolate_generic_raviart_thomas_apply_face(
-      const MatrixFreeFunctions::ShapeInfo<Number> &shape_info,
-      const unsigned int                            face_no,
-      const Number *                                input,
-      Number *                                      output)
+      const MatrixFreeFunctions::ShapeInfo<Number2> &shape_info,
+      const unsigned int                             face_no,
+      const Number *                                 input,
+      Number *                                       output)
     {
       // These types are evaluators in either normal or tangential direction
       // depending on the face direction, with different normal directions for
@@ -3771,13 +3778,15 @@ namespace internal
                                           (fe_degree == -1) ? 1 : fe_degree + 1,
                                           0,
                                           Number,
-                                          0>,
+                                          0,
+                                          Number2>,
         EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
                                           dim,
                                           (fe_degree == -1) ? 1 : fe_degree,
                                           0,
                                           Number,
-                                          0>>::type;
+                                          0,
+                                          Number2>>::type;
       using Evalf1 = typename std::conditional<
         face_direction == 1,
         EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
@@ -3785,13 +3794,15 @@ namespace internal
                                           (fe_degree == -1) ? 1 : fe_degree + 1,
                                           0,
                                           Number,
-                                          1>,
+                                          1,
+                                          Number2>,
         EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
                                           dim,
                                           (fe_degree == -1) ? 1 : fe_degree,
                                           0,
                                           Number,
-                                          1>>::type;
+                                          1,
+                                          Number2>>::type;
       using Evalf2 = typename std::conditional<
         face_direction == 2,
         EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
@@ -3799,13 +3810,15 @@ namespace internal
                                           (fe_degree == -1) ? 1 : fe_degree + 1,
                                           0,
                                           Number,
-                                          2>,
+                                          2,
+                                          Number2>,
         EvaluatorTensorProductAnisotropic<evaluate_raviart_thomas,
                                           dim,
                                           (fe_degree == -1) ? 1 : fe_degree,
                                           0,
                                           Number,
-                                          2>>::type;
+                                          2,
+                                          Number2>>::type;
 
       Evalf0 evalf0 =
         create_evaluator_tensor_product<Evalf0>((face_direction == 0) ?
@@ -4123,6 +4136,8 @@ namespace internal
     {
       const auto &shape_info = fe_eval.get_shape_info();
       const auto &shape_data = shape_info.data.front();
+      using Number2 =
+        typename internal::VectorizedArrayTrait<Number>::value_type;
 
       if (shape_info.element_type == MatrixFreeFunctions::tensor_none)
         {
@@ -4137,7 +4152,7 @@ namespace internal
           const std::size_t  n_q_points = shape_info.n_q_points_faces[face_no];
 
           using Eval =
-            EvaluatorTensorProduct<evaluate_general, 1, 0, 0, Number, Number>;
+            EvaluatorTensorProduct<evaluate_general, 1, 0, 0, Number, Number2>;
 
           if (evaluation_flag & EvaluationFlags::values)
             {
@@ -4163,7 +4178,7 @@ namespace internal
               auto gradients_quad_ptr     = fe_eval.begin_gradients();
               auto values_dofs_actual_ptr = values_dofs;
 
-              std::array<const Number *, dim> shape_gradients;
+              std::array<const Number2 *, dim> shape_gradients;
               for (unsigned int d = 0; d < dim; ++d)
                 shape_gradients[d] = &shape_data.shape_gradients_face(
                   face_no, face_orientation, d, 0);
@@ -4360,6 +4375,8 @@ namespace internal
     {
       const auto &shape_info = fe_eval.get_shape_info();
       const auto &shape_data = shape_info.data.front();
+      using Number2 =
+        typename internal::VectorizedArrayTrait<Number>::value_type;
 
       if (shape_info.element_type == MatrixFreeFunctions::tensor_none)
         {
@@ -4374,7 +4391,7 @@ namespace internal
           const std::size_t  n_q_points = shape_info.n_q_points_faces[face_no];
 
           using Eval =
-            EvaluatorTensorProduct<evaluate_general, 1, 0, 0, Number, Number>;
+            EvaluatorTensorProduct<evaluate_general, 1, 0, 0, Number, Number2>;
 
           if (integration_flag & EvaluationFlags::values)
             {
@@ -4400,7 +4417,7 @@ namespace internal
               auto gradients_quad_ptr     = fe_eval.begin_gradients();
               auto values_dofs_actual_ptr = values_dofs;
 
-              std::array<const Number *, dim> shape_gradients;
+              std::array<const Number2 *, dim> shape_gradients;
               for (unsigned int d = 0; d < dim; ++d)
                 shape_gradients[d] = &shape_data.shape_gradients_face(
                   face_no, face_orientation, d, 0);
@@ -4720,10 +4737,10 @@ namespace internal
                 const auto face_no = fe_eval.get_face_no(v);
 
                 grad_weight[v] =
-                  shape_data.shape_data_on_face[0][fe_degree +
-                                                   (integrate ?
-                                                      (2 - (face_no % 2)) :
-                                                      (1 + (face_no % 2)))][0];
+                  shape_data
+                    .shape_data_on_face[0][fe_degree + (integrate ?
+                                                          (2 - (face_no % 2)) :
+                                                          (1 + (face_no % 2)))];
 
                 index_array_hermite[v] =
                   &fe_eval.get_shape_info().face_to_cell_index_hermite(face_no,
@@ -5276,11 +5293,10 @@ namespace internal
     }
 
     static bool
-    supports(
-      const EvaluationFlags::EvaluationFlags evaluation_flag,
-      const MatrixFreeFunctions::ShapeInfo<VectorizedArrayType> &shape_info,
-      const Number2 *                                            vector_ptr,
-      MatrixFreeFunctions::DoFInfo::IndexStorageVariants         storage)
+    supports(const EvaluationFlags::EvaluationFlags             evaluation_flag,
+             const MatrixFreeFunctions::ShapeInfo<Number2> &    shape_info,
+             const Number2 *                                    vector_ptr,
+             MatrixFreeFunctions::DoFInfo::IndexStorageVariants storage)
     {
       const unsigned int fe_degree = shape_info.data.front().fe_degree;
       if (fe_degree < 1 || !shape_info.data.front().nodal_at_cell_boundaries ||
@@ -5601,15 +5617,17 @@ namespace internal
       Assert(fe_eval.get_shape_info().element_type <=
                MatrixFreeFunctions::tensor_symmetric_no_collocation,
              ExcNotImplemented());
+      using Number2 = typename VectorizedArrayTrait<Number>::value_type;
 
       EvaluatorTensorProduct<evaluate_evenodd,
                              dim,
                              fe_degree + 1,
                              fe_degree + 1,
-                             Number>
+                             Number,
+                             Number2>
         evaluator(
-          AlignedVector<Number>(),
-          AlignedVector<Number>(),
+          {},
+          {},
           fe_eval.get_shape_info().data.front().inverse_shape_values_eo);
 
       for (unsigned int d = 0; d < n_components; ++d)
@@ -5655,13 +5673,14 @@ namespace internal
         fe_eval.get_shape_info().dofs_per_component_on_cell;
 
       Assert(dim >= 1 || dim <= 3, ExcNotImplemented());
+      using Number2 = typename VectorizedArrayTrait<Number>::value_type;
 
-      EvaluatorTensorProduct<evaluate_general, dim, 0, 0, Number> evaluator(
-        fe_eval.get_shape_info().data.front().inverse_shape_values,
-        AlignedVector<Number>(),
-        AlignedVector<Number>(),
-        fe_eval.get_shape_info().data.front().fe_degree + 1,
-        fe_eval.get_shape_info().data.front().fe_degree + 1);
+      EvaluatorTensorProduct<evaluate_general, dim, 0, 0, Number, Number2>
+        evaluator(fe_eval.get_shape_info().data.front().inverse_shape_values,
+                  {},
+                  {},
+                  fe_eval.get_shape_info().data.front().fe_degree + 1,
+                  fe_eval.get_shape_info().data.front().fe_degree + 1);
 
       for (unsigned int d = 0; d < n_components; ++d)
         {
@@ -5703,13 +5722,15 @@ namespace internal
   template <int dim, typename Number>
   struct CellwiseInverseMassMatrixImplFlexible
   {
+    using Number2 = typename VectorizedArrayTrait<Number>::value_type;
+
     template <int fe_degree, int = 0>
     static bool
-    run(const unsigned int           n_desired_components,
-        const AlignedVector<Number> &inverse_shape,
-        const AlignedVector<Number> &inverse_coefficients,
-        const Number *               in_array,
-        Number *                     out_array,
+    run(const unsigned int            n_desired_components,
+        const AlignedVector<Number2> &inverse_shape,
+        const AlignedVector<Number> & inverse_coefficients,
+        const Number *                in_array,
+        Number *                      out_array,
         std::enable_if_t<fe_degree != -1> * = nullptr)
     {
       constexpr unsigned int dofs_per_component =
@@ -5728,10 +5749,9 @@ namespace internal
                              dim,
                              fe_degree + 1,
                              fe_degree + 1,
-                             Number>
-        evaluator(AlignedVector<Number>(),
-                  AlignedVector<Number>(),
-                  inverse_shape);
+                             Number,
+                             Number2>
+        evaluator({}, {}, inverse_shape);
 
       const unsigned int shift_coefficient =
         inverse_coefficients.size() > dofs_per_component ? dofs_per_component :
@@ -5769,7 +5789,7 @@ namespace internal
     template <int fe_degree, int = 0>
     static bool
     run(const unsigned int,
-        const AlignedVector<Number> &,
+        const AlignedVector<Number2> &,
         const AlignedVector<Number> &,
         const Number *,
         Number *,
@@ -5816,13 +5836,15 @@ namespace internal
                                        Utilities::pow(fe_degree + 1, dim) :
                                        fe_eval.get_shape_info().n_q_points;
 
+      using Number2 = typename VectorizedArrayTrait<Number>::value_type;
       EvaluatorTensorProduct<do_inplace ? evaluate_evenodd : evaluate_general,
                              dim,
                              fe_degree + 1,
                              n_q_points_1d,
-                             Number>
-        evaluator(AlignedVector<Number>(),
-                  AlignedVector<Number>(),
+                             Number,
+                             Number2>
+        evaluator({},
+                  {},
                   inverse_shape,
                   fe_eval.get_shape_info().data.front().fe_degree + 1,
                   fe_eval.get_shape_info().data.front().n_q_points_1d);
