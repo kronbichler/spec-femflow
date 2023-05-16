@@ -20,6 +20,7 @@
 #include <deal.II/base/config.h>
 
 #include <deal.II/base/exceptions.h>
+#include <deal.II/base/ndarray.h>
 #include <deal.II/base/template_constraints.h>
 
 #include <array>
@@ -889,11 +890,29 @@ vectorized_load_and_transpose(const unsigned int              n_entries,
                               const unsigned int *            offsets,
                               VectorizedArray<Number, width> *out)
 {
-  for (unsigned int i = 0; i < n_entries; ++i)
+  const std::size_t n_chunks = n_entries / 4;
+  for (std::size_t i = 0; i < 4 * n_chunks; i += 4)
+    {
+      dealii::ndarray<Number, width, 4> tmp;
+      for (std::size_t v = 0; v < VectorizedArray<Number, width>::size(); ++v)
+        {
+          DEAL_II_OPENMP_SIMD_PRAGMA
+          for (std::size_t j = 0; j < 4; ++j)
+            tmp[v][j] = in[static_cast<std::size_t>(offsets[v]) + i + j];
+        }
+      for (std::size_t j = 0; j < 4; ++j)
+        {
+          DEAL_II_OPENMP_SIMD_PRAGMA
+          for (std::size_t v = 0; v < VectorizedArray<Number, width>::size();
+               ++v)
+            out[i + j][v] = tmp[v][j];
+        }
+    }
+  for (std::size_t i = n_chunks * 4; i < n_entries; ++i)
     {
       DEAL_II_OPENMP_SIMD_PRAGMA
       for (std::size_t v = 0; v < VectorizedArray<Number, width>::size(); ++v)
-        out[i][v] = in[offsets[v] + i];
+        out[i][v] = in[static_cast<std::size_t>(offsets[v]) + i];
     }
 }
 
@@ -915,7 +934,7 @@ vectorized_load_and_transpose(const unsigned int                 n_entries,
                               const std::array<Number *, width> &in,
                               VectorizedArray<Number, width> *   out)
 {
-  for (unsigned int i = 0; i < n_entries; ++i)
+  for (std::size_t i = 0; i < n_entries; ++i)
     {
       DEAL_II_OPENMP_SIMD_PRAGMA
       for (std::size_t v = 0; v < VectorizedArray<Number, width>::size(); ++v)
@@ -971,19 +990,46 @@ vectorized_transpose_and_store(const bool                            add_into,
                                const unsigned int *                  offsets,
                                Number *                              out)
 {
+  const std::size_t n_chunks = n_entries / 4;
+  for (std::size_t i = 0; i < 4 * n_chunks; i += 4)
+    {
+      dealii::ndarray<Number, width, 4> tmp;
+      for (std::size_t j = 0; j < 4; ++j)
+        {
+          DEAL_II_OPENMP_SIMD_PRAGMA
+          for (std::size_t v = 0; v < VectorizedArray<Number, width>::size();
+               ++v)
+            tmp[v][j] = in[i + j][v];
+        }
+      if (add_into)
+        for (std::size_t v = 0; v < VectorizedArray<Number, width>::size(); ++v)
+          {
+            DEAL_II_OPENMP_SIMD_PRAGMA
+            for (std::size_t j = 0; j < 4; ++j)
+              out[static_cast<std::size_t>(offsets[v]) + i + j] += tmp[v][j];
+          }
+      else
+        for (std::size_t v = 0; v < VectorizedArray<Number, width>::size(); ++v)
+          {
+            DEAL_II_OPENMP_SIMD_PRAGMA
+            for (std::size_t j = 0; j < 4; ++j)
+              out[static_cast<std::size_t>(offsets[v]) + i + j] = tmp[v][j];
+          }
+    }
+
   if (add_into)
-    for (unsigned int i = 0; i < n_entries; ++i)
+    for (std::size_t i = 4 * n_chunks; i < n_entries; ++i)
       {
         DEAL_II_OPENMP_SIMD_PRAGMA
         for (std::size_t v = 0; v < VectorizedArray<Number, width>::size(); ++v)
-          out[offsets[v] + i] += in[i][v];
+          out[static_cast<std::size_t>(offsets[v]) + i] += in[i][v];
       }
   else
-    for (unsigned int i = 0; i < n_entries; ++i)
+    for (std::size_t i = 4 * n_chunks; i < n_entries; ++i)
       {
         DEAL_II_OPENMP_SIMD_PRAGMA
         for (std::size_t v = 0; v < VectorizedArray<Number, width>::size(); ++v)
-          out[offsets[v] + i] = in[i][v];
+          out[static_cast<std::size_t>(offsets[v]) + i] = in[i][v];
       }
 }
 
@@ -1007,14 +1053,14 @@ vectorized_transpose_and_store(const bool                            add_into,
                                std::array<Number *, width> &         out)
 {
   if (add_into)
-    for (unsigned int i = 0; i < n_entries; ++i)
+    for (std::size_t i = 0; i < n_entries; ++i)
       {
         DEAL_II_OPENMP_SIMD_PRAGMA
         for (std::size_t v = 0; v < VectorizedArray<Number, width>::size(); ++v)
           out[v][i] += in[i][v];
       }
   else
-    for (unsigned int i = 0; i < n_entries; ++i)
+    for (std::size_t i = 0; i < n_entries; ++i)
       {
         DEAL_II_OPENMP_SIMD_PRAGMA
         for (std::size_t v = 0; v < VectorizedArray<Number, width>::size(); ++v)
@@ -1528,10 +1574,8 @@ compare_and_apply_mask(const VectorizedArray<Number, width> &left,
   VectorizedArray<Number, width> result;
   DEAL_II_OPENMP_SIMD_PRAGMA
   for (std::size_t i = 0; i < width; ++i)
-    result.data[i] = compare_and_apply_mask<predicate, Number>(left.data[i],
-                                                               right.data[i],
-                                                               true_value.data[i],
-                                                               false_value.data[i]);
+    result.data[i] = compare_and_apply_mask<predicate, Number>(
+      left.data[i], right.data[i], true_value.data[i], false_value.data[i]);
   return result;
 }
 
