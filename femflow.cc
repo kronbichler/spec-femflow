@@ -44,10 +44,9 @@ namespace NavierStokes_DG
 {
   using namespace dealii;
 
-  constexpr unsigned int dimension            = 3;
-  constexpr unsigned int n_global_refinements = 1;
-  constexpr unsigned int fe_degree            = 4;
-  constexpr unsigned int n_q_points_1d        = fe_degree + 2;
+  constexpr unsigned int dimension     = 3;
+  constexpr unsigned int fe_degree     = 4;
+  constexpr unsigned int n_q_points_1d = fe_degree + 2;
 
   constexpr unsigned int group_size = numbers::invalid_unsigned_int;
 
@@ -62,7 +61,7 @@ namespace NavierStokes_DG
   constexpr double viscosity   = 1. / 1600;
   constexpr double lambda      = viscosity * c_p / 0.71;
   constexpr double Ma          = 0.1;
-  constexpr double output_tick = 0.1;
+  constexpr double output_tick = 0.05;
   constexpr double refine_tick = 0.3;
 
   const double courant_number = 0.4 / std::pow(fe_degree, 1.5);
@@ -282,6 +281,7 @@ namespace NavierStokes_DG
   }
 
 
+
   template <int dim, typename Number, int n_components = dim + 2>
   Tensor<1, n_components, VectorizedArray<Number>>
   evaluate_function(const Function<dim> &                      function,
@@ -438,6 +438,7 @@ namespace NavierStokes_DG
   }
 
 
+
   template <int dim, int degree, int n_points_1d>
   EulerOperator<dim, degree, n_points_1d>::~EulerOperator()
   {
@@ -446,6 +447,7 @@ namespace NavierStokes_DG
       MPI_Comm_free(&subcommunicator);
 #endif
   }
+
 
 
   template <int dim, int degree, int n_points_1d>
@@ -1095,7 +1097,7 @@ namespace NavierStokes_DG
         velocity_kernel.set_density(data, solution);
         velocity_kernel.time_step = time_step;
 
-        SolverControl        control(1000, 1e-7 * rhs.l2_norm());
+        SolverControl        control(1000, 1e-8 * rhs.l2_norm());
         SolverCG<VectorType> solver_cg(control);
         solver_cg.solve(velocity_operator,
                         velocity_solution,
@@ -1120,7 +1122,7 @@ namespace NavierStokes_DG
 
         energy_kernel.time_step = time_step;
 
-        SolverControl        control(1000, 1e-7 * rhs.l2_norm());
+        SolverControl        control(1000, 1e-8 * rhs.l2_norm());
         SolverCG<VectorType> solver_cg(control);
         energy_solution = 0;
         solver_cg.solve(energy_operator, energy_solution, rhs, energy_diagonal);
@@ -1141,7 +1143,7 @@ namespace NavierStokes_DG
     {
       if (Utilities::MPI::this_mpi_process(MPI_COMM_WORLD) == 0)
         std::cout
-          << "Velocity solver average iterations: " << std::setprecision(2)
+          << "Velocity solver average iterations: " << std::setprecision(3)
           << static_cast<double>(n_velocity_iterations) / n_velocity_solves
           << std::endl
           << "Energy solver average iterations: "
@@ -1380,11 +1382,13 @@ namespace NavierStokes_DG
     FlowProblem();
 
     void
-    run(const double final_time);
+    run(const double       final_time,
+        const unsigned int n_refinements,
+        const bool         debug_timing);
 
   private:
     void
-    make_grid();
+    make_grid(const unsigned int n_refinements);
 
     void
     make_dofs();
@@ -1471,7 +1475,7 @@ namespace NavierStokes_DG
 
   template <int dim>
   void
-  FlowProblem<dim>::make_grid()
+  FlowProblem<dim>::make_grid(const unsigned int n_refinements)
   {
     TimerOutput::Scope t(timer, "setup grid");
     Point<dim>         lower_left, upper_right;
@@ -1481,7 +1485,14 @@ namespace NavierStokes_DG
     for (unsigned int d = 0; d < dim; ++d)
       upper_right[d] = numbers::PI;
 
-    GridGenerator::hyper_rectangle(triangulation, lower_left, upper_right);
+    std::vector<unsigned int> refinements(dim, 1);
+    for (unsigned int d = 0; d < std::min<unsigned int>(dim, n_refinements);
+         ++d)
+      refinements[d] = 2;
+    GridGenerator::subdivided_hyper_rectangle(triangulation,
+                                              refinements,
+                                              lower_left,
+                                              upper_right);
     for (const auto &cell : triangulation.cell_iterators())
       for (unsigned int face : cell->face_indices())
         if (cell->at_boundary(face))
@@ -1495,8 +1506,6 @@ namespace NavierStokes_DG
     triangulation.add_periodicity(periodic_faces);
 
     triangulation.refine_global(2);
-
-    triangulation.refine_global(n_global_refinements);
   }
 
 
@@ -1535,6 +1544,7 @@ namespace NavierStokes_DG
   void
   FlowProblem<dim>::refine_grid(const unsigned int refine_cycle)
   {
+    const unsigned int n_global_levels = 3;
     // To create a robust mesh, do not follow error indicators (the content in
     // high polynomial degrees would be one option), but instead just refine
     // into different radii
@@ -1544,12 +1554,12 @@ namespace NavierStokes_DG
           const Point<dim> center = cell->center();
           if (center.norm() < (0.7 + 0.15 * (refine_cycle % 2)) * numbers::PI)
             {
-              if (cell->level() < static_cast<int>(n_global_refinements) + 3)
+              if (cell->level() < static_cast<int>(n_global_levels))
                 cell->set_refine_flag();
             }
           else
             {
-              if (cell->level() == static_cast<int>(n_global_refinements) + 3)
+              if (cell->level() == static_cast<int>(n_global_levels))
                 cell->set_coarsen_flag();
             }
         }
@@ -1682,6 +1692,7 @@ namespace NavierStokes_DG
   void
   FlowProblem<dim>::output_results(const unsigned int result_number)
   {
+    TimerOutput::Scope          t(timer, "output");
     const std::array<double, 2> energy =
       euler_operator.compute_kinetic_energy(solution);
     pcout << "Time:" << std::setw(8) << std::setprecision(3) << time
@@ -1690,62 +1701,60 @@ namespace NavierStokes_DG
           << energy[0] << ", dissipation: " << std::setprecision(4)
           << std::setw(10) << energy[1] << std::endl;
 
+    Postprocessor postprocessor;
+    DataOut<dim>  data_out;
+
+    DataOutBase::VtkFlags flags;
+    flags.write_higher_order_cells = true;
+    data_out.set_flags(flags);
+
+    data_out.attach_dof_handler(dof_handler);
     {
-      TimerOutput::Scope t(timer, "output");
+      std::vector<std::string> names;
+      names.emplace_back("density");
+      for (unsigned int d = 0; d < dim; ++d)
+        names.emplace_back("momentum");
+      names.emplace_back("energy");
 
-      Postprocessor postprocessor;
-      DataOut<dim>  data_out;
-
-      DataOutBase::VtkFlags flags;
-      flags.write_higher_order_cells = true;
-      data_out.set_flags(flags);
-
-      data_out.attach_dof_handler(dof_handler);
-      {
-        std::vector<std::string> names;
-        names.emplace_back("density");
-        for (unsigned int d = 0; d < dim; ++d)
-          names.emplace_back("momentum");
-        names.emplace_back("energy");
-
-        std::vector<DataComponentInterpretation::DataComponentInterpretation>
-          interpretation;
+      std::vector<DataComponentInterpretation::DataComponentInterpretation>
+        interpretation;
+      interpretation.push_back(
+        DataComponentInterpretation::component_is_scalar);
+      for (unsigned int d = 0; d < dim; ++d)
         interpretation.push_back(
-          DataComponentInterpretation::component_is_scalar);
-        for (unsigned int d = 0; d < dim; ++d)
-          interpretation.push_back(
-            DataComponentInterpretation::component_is_part_of_vector);
-        interpretation.push_back(
-          DataComponentInterpretation::component_is_scalar);
+          DataComponentInterpretation::component_is_part_of_vector);
+      interpretation.push_back(
+        DataComponentInterpretation::component_is_scalar);
 
-        data_out.add_data_vector(dof_handler, solution, names, interpretation);
-      }
-      data_out.add_data_vector(solution, postprocessor);
-      constraints_velocity.distribute(viscous_operator.velocity_solution);
-      data_out.add_data_vector(
-        dof_handler_velocity,
-        viscous_operator.velocity_solution,
-        std::vector<std::string>(dim, "velocity_continuous"),
-        std::vector<DataComponentInterpretation::DataComponentInterpretation>(
-          dim, DataComponentInterpretation::component_is_part_of_vector));
-
-      Vector<double> mpi_owner(triangulation.n_active_cells());
-      mpi_owner = Utilities::MPI::this_mpi_process(MPI_COMM_WORLD);
-      data_out.add_data_vector(mpi_owner, "owner");
-
-      data_out.build_patches(mapping,
-                             fe.degree,
-                             DataOut<dim>::curved_inner_cells);
+      data_out.add_data_vector(dof_handler, solution, names, interpretation);
     }
+    data_out.add_data_vector(solution, postprocessor);
+    constraints_velocity.distribute(viscous_operator.velocity_solution);
+    data_out.add_data_vector(
+      dof_handler_velocity,
+      viscous_operator.velocity_solution,
+      std::vector<std::string>(dim, "velocity_continuous"),
+      std::vector<DataComponentInterpretation::DataComponentInterpretation>(
+        dim, DataComponentInterpretation::component_is_part_of_vector));
+
+    Vector<double> mpi_owner(triangulation.n_active_cells());
+    mpi_owner = Utilities::MPI::this_mpi_process(MPI_COMM_WORLD);
+    data_out.add_data_vector(mpi_owner, "owner");
+
+    data_out.build_patches(mapping,
+                           fe.degree,
+                           DataOut<dim>::curved_inner_cells);
   }
 
 
 
   template <int dim>
   void
-  FlowProblem<dim>::run(const double final_time)
+  FlowProblem<dim>::run(const double       final_time,
+                        const unsigned int n_refinements,
+                        const bool         debug_timing)
   {
-    make_grid();
+    make_grid(n_refinements);
 
     make_dofs();
 
@@ -1804,7 +1813,6 @@ namespace NavierStokes_DG
         }
         {
           TimerOutput::Scope t(timer, "euler step");
-          // propagate with Ralston's (sometimes called Heun's) method
           euler_operator.apply(time, solution, rk_register_1);
           solution.add(time_step * (0.5 * 1. / 4.), rk_register_1);
           rk_register_1.sadd(time_step * 0.5 * (2. / 3. - 1. / 4.),
@@ -1834,9 +1842,13 @@ namespace NavierStokes_DG
 
     viscous_operator.print_solver_statistics();
     pcout << std::endl;
+
+    if (debug_timing)
+      timer.print_wall_time_statistics(MPI_COMM_WORLD);
   }
 
 } // namespace NavierStokes_DG
+
 
 
 int
@@ -1851,12 +1863,27 @@ main(int argc, char **argv)
     {
       deallog.depth_console(0);
 
-      double final_time = 4;
+      std::string problem_setting = "-reference";
       if (argc > 1)
-        final_time = std::atof(argv[1]);
+        problem_setting = argv[1];
+
+      bool debug_timing = false;
+      if (argc > 2)
+        debug_timing = std::atoi(argv[2]);
 
       FlowProblem<dimension> euler_problem;
-      euler_problem.run(final_time);
+      if (problem_setting == "-reference")
+        euler_problem.run(1.5, 3, debug_timing);
+      else if (problem_setting == "-train")
+        euler_problem.run(0.5, 3, debug_timing);
+      else if (problem_setting == "-test")
+        euler_problem.run(0.10, 1, debug_timing);
+      else
+        {
+          std::cout << "Unknown test case " << problem_setting << std::endl;
+          std::cout << "Valid cases are -test, -train, -reference" << std::endl;
+          std::cout << "Aborting" << std::endl;
+        }
     }
   catch (std::exception &exc)
     {
