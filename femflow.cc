@@ -1863,7 +1863,7 @@ main(int argc, char **argv)
     {
       deallog.depth_console(0);
 
-      std::string problem_setting = "-reference";
+      std::string problem_setting = "-refrate";
       if (argc > 1)
         problem_setting = argv[1];
 
@@ -1872,16 +1872,16 @@ main(int argc, char **argv)
         debug_timing = std::atoi(argv[2]);
 
       FlowProblem<dimension> euler_problem;
-      if (problem_setting == "-reference")
+      if (problem_setting == "-refrate")
         euler_problem.run(1.5, 3, debug_timing);
       else if (problem_setting == "-train")
         euler_problem.run(0.5, 3, debug_timing);
       else if (problem_setting == "-test")
-        euler_problem.run(0.10, 1, debug_timing);
+        euler_problem.run(0.01, 1, debug_timing);
       else
         {
           std::cout << "Unknown test case " << problem_setting << std::endl;
-          std::cout << "Valid cases are -test, -train, -reference" << std::endl;
+          std::cout << "Valid cases are -test, -train, -refrate" << std::endl;
           std::cout << "Aborting" << std::endl;
         }
     }
