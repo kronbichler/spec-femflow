@@ -1754,6 +1754,8 @@ namespace NavierStokes_DG
                         const unsigned int n_refinements,
                         const bool         debug_timing)
   {
+    pcout << "Running with T=" << final_time << " n_refine=" << n_refinements
+          << std::endl;
     make_grid(n_refinements);
 
     make_dofs();
@@ -1857,19 +1859,36 @@ main(int argc, char **argv)
   using namespace NavierStokes_DG;
   using namespace dealii;
 
-  Utilities::MPI::MPI_InitFinalize mpi_initialization(argc, argv, 1);
-
   try
     {
-      deallog.depth_console(0);
+      std::string  problem_setting = "-refrate";
+      bool         debug_timing    = false;
+      double       end_time        = 0.5;
+      unsigned int n_refinements   = 3;
 
-      std::string problem_setting = "-refrate";
-      if (argc > 1)
-        problem_setting = argv[1];
-
-      bool debug_timing = false;
-      if (argc > 2)
-        debug_timing = std::atoi(argv[2]);
+      for (int arg_number = 1; arg_number < argc; ++arg_number)
+        {
+          if (std::string(argv[arg_number]) == "-manual")
+            {
+              if (argc < arg_number + 3)
+                {
+                  std::cout
+                    << "In -manual mode, must give two number arguments for "
+                    << "end time and spatial refinement!" << std::endl;
+                  return 1;
+                }
+              problem_setting = "-manual";
+              std::stringstream str_time(argv[arg_number + 1]);
+              str_time >> end_time;
+              std::stringstream str_refine(argv[arg_number + 2]);
+              str_refine >> n_refinements;
+              arg_number += 2;
+            }
+          else if (std::string(argv[arg_number]) == "-debug-timings")
+            debug_timing = true;
+          else
+            problem_setting = argv[arg_number];
+        }
 
       FlowProblem<dimension> euler_problem;
       if (problem_setting == "-refrate")
@@ -1878,11 +1897,19 @@ main(int argc, char **argv)
         euler_problem.run(0.5, 3, debug_timing);
       else if (problem_setting == "-test")
         euler_problem.run(0.01, 1, debug_timing);
+      else if (problem_setting == "-manual")
+        euler_problem.run(end_time, n_refinements, debug_timing);
       else
         {
-          std::cout << "Unknown test case " << problem_setting << std::endl;
-          std::cout << "Valid cases are -test, -train, -refrate" << std::endl;
+          std::cout << "Unknown setting " << problem_setting << std::endl;
+          std::cout << "Valid arguments are "
+                    << "-test, -train, -refrate, -debug-timings, -manual"
+                    << std::endl
+                    << "For -manual, you need to specify two numbers, the end "
+                    << "time and the number of refinements between 0 and 3"
+                    << std::endl;
           std::cout << "Aborting" << std::endl;
+          return 1;
         }
     }
   catch (std::exception &exc)
