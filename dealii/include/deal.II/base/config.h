@@ -100,7 +100,8 @@
 /* #undef DEAL_II_HAVE_LIBSTDCXX_DEMANGLER */
 /* #undef __PRETTY_FUNCTION__ */
 #define DEAL_II_ALWAYS_INLINE
-#define DEAL_II_RESTRICT __restrict
+#define DEAL_II_RESTRICT
+/* #define DEAL_II_RESTRICT __restrict */
 /* #undef DEAL_II_COMPILER_HAS_DIAGNOSTIC_PRAGMA */
 
 /*
@@ -139,7 +140,8 @@
 #define DEAL_II_COMPILER_VECTORIZATION_LEVEL 0
 #endif
 
-#define DEAL_II_OPENMP_SIMD_PRAGMA _Pragma("omp simd")
+#define DEAL_II_OPENMP_SIMD_PRAGMA
+/* #define DEAL_II_OPENMP_SIMD_PRAGMA _Pragma("omp simd") */
 
 
 /***********************************************************************
