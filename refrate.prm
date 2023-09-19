@@ -14,5 +14,5 @@ subsection Control parameters
   set Courant number      = 0.05
   set refinements         = 3
   set end time            = 1.5
-  set print debug timings = true
+  set print debug timings = false
 end
