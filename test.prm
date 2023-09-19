@@ -9,7 +9,10 @@ subsection Flow parameters
 end
 
 subsection Control parameters
-  set output tick  = 0.05
-  set refine tick  = 0.3
-  set Courant number = 0.05
+  set output tick         = 0.05
+  set refine tick         = 0.3
+  set Courant number      = 0.05
+  set refinements         = 1
+  set end time            = 0.01
+  set print debug timings = true
 end

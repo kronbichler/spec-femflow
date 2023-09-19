@@ -67,6 +67,8 @@ namespace NavierStokes_DG
       , output_tick(0)
       , refine_tick(0)
       , courant_number(0)
+      , n_refinements(0)
+      , end_time(0)
     {
       ParameterHandler prm;
       {
@@ -119,6 +121,24 @@ namespace NavierStokes_DG
           "Courant number controlling the time step via dt = Courant * h",
           Patterns::Double(0),
           true);
+        prm.add_parameter(
+          "refinements",
+          n_refinements,
+          "Number of refinements, resulting in 64 * 2^refinements elements",
+          Patterns::Integer(0),
+          true);
+        prm.add_parameter(
+          "end time",
+          end_time,
+          "End time for the simulation",
+          Patterns::Double(0),
+          true);
+        prm.add_parameter(
+          "print debug timings",
+          print_debug_timings,
+          "true/false",
+          Patterns::Bool(),
+          true);
         prm.leave_subsection();
       }
       prm.parse_input(filename, "", true, true);
@@ -134,6 +154,9 @@ namespace NavierStokes_DG
     double output_tick;
     double refine_tick;
     double courant_number;
+    unsigned int n_refinements;
+    double end_time;
+    bool print_debug_timings;
   };
 
 
@@ -1500,9 +1523,7 @@ namespace NavierStokes_DG
     FlowProblem(const Parameters &parameters);
 
     void
-    run(const double       final_time,
-        const unsigned int n_refinements,
-        const bool         debug_timing);
+    run();
 
   private:
     void
@@ -1874,13 +1895,11 @@ namespace NavierStokes_DG
 
   template <int dim>
   void
-  FlowProblem<dim>::run(const double       final_time,
-                        const unsigned int n_refinements,
-                        const bool         debug_timing)
+  FlowProblem<dim>::run()
   {
-    pcout << "Running with T=" << final_time << " n_refine=" << n_refinements
+    pcout << "Running with T=" << parameters.end_time << " n_refine=" << parameters.n_refinements
           << std::endl;
-    make_grid(n_refinements);
+    make_grid(parameters.n_refinements);
 
     make_dofs();
 
@@ -1912,7 +1931,7 @@ namespace NavierStokes_DG
 
     unsigned int timestep_number = 0;
 
-    while (time < final_time - 1e-12)
+    while (time < parameters.end_time - 1e-12)
       {
         ++timestep_number;
         if (timestep_number % 5 == 0)
@@ -1952,7 +1971,7 @@ namespace NavierStokes_DG
 
         if (static_cast<int>(time / parameters.output_tick) !=
               static_cast<int>((time - time_step) / parameters.output_tick) ||
-            time >= final_time - 1e-12)
+            time >= parameters.end_time - 1e-12)
           output_results(static_cast<unsigned int>(
             std::round(time / parameters.output_tick)));
 
@@ -1969,7 +1988,7 @@ namespace NavierStokes_DG
     viscous_operator.print_solver_statistics();
     pcout << std::endl;
 
-    if (debug_timing)
+    if (parameters.print_debug_timings)
       timer.print_wall_time_statistics(MPI_COMM_WORLD);
   }
 
@@ -1984,41 +2003,12 @@ main(int argc, char **argv)
   try
     {
       std::string  filename      = "parameters.prm";
-      bool         debug_timing  = false;
-      double       end_time      = 0.5;
-      unsigned int n_refinements = 3;
-
-      for (int arg_number = 1; arg_number < argc; ++arg_number)
-        {
-          if (std::string(argv[arg_number]) == "-debug-timings")
-            debug_timing = true;
-          else if (std::string(argv[arg_number]).find("prm") !=
-                   std::string::npos)
-            filename = argv[arg_number];
-          else
-            {
-              if (argc < arg_number + 2)
-                {
-                  std::cout << "Please provide two number arguments for "
-                            << "end time and spatial refinement!" << std::endl;
-                  std::cout << "Optionally, you can add -debug-timings"
-                            << std::endl;
-                  return 1;
-                }
-              else
-                {
-                  std::stringstream str_time(argv[arg_number]);
-                  str_time >> end_time;
-                  std::stringstream str_refine(argv[arg_number + 1]);
-                  str_refine >> n_refinements;
-                  ++arg_number;
-                }
-            }
-        }
+      if (argc > 1)
+        filename = argv[1];
 
       const Parameters       parameters(filename);
       FlowProblem<dimension> euler_problem(parameters);
-      euler_problem.run(end_time, n_refinements, debug_timing);
+      euler_problem.run();
     }
   catch (std::exception &exc)
     {

@@ -1,0 +1,18 @@
+subsection Flow parameters
+  set gamma       = 1.4
+  set R           = 287.0
+  set c_v         = 717.5
+  set c_p         = 1.951219512195122e-03
+  set viscosity   = 6.25e-04
+  set lambda      = 1.717622810030917e-06
+  set Mach number = 0.1
+end
+
+subsection Control parameters
+  set output tick         = 0.05
+  set refine tick         = 0.3
+  set Courant number      = 0.05
+  set refinements         = 3
+  set end time            = 1.5
+  set print debug timings = true
+end
