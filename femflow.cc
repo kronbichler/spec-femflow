@@ -1,6 +1,7 @@
 #include <deal.II/base/conditional_ostream.h>
 #include <deal.II/base/function.h>
 #include <deal.II/base/logstream.h>
+#include <deal.II/base/parameter_handler.h>
 #include <deal.II/base/time_stepping.h>
 #include <deal.II/base/timer.h>
 #include <deal.II/base/utilities.h>
@@ -39,7 +40,6 @@
 
 #include "laplace_operator.h"
 
-
 namespace NavierStokes_DG
 {
   using namespace dealii;
@@ -54,17 +54,87 @@ namespace NavierStokes_DG
 
   using VectorizedArrayType = VectorizedArray<Number>;
 
-  constexpr double gamma       = 1.4;
-  constexpr double R           = 287.;
-  constexpr double c_v         = R / (gamma - 1.);
-  constexpr double c_p         = gamma / c_v;
-  constexpr double viscosity   = 1. / 1600;
-  constexpr double lambda      = viscosity * c_p / 0.71;
-  constexpr double Ma          = 0.1;
-  constexpr double output_tick = 0.05;
-  constexpr double refine_tick = 0.3;
+  struct Parameters
+  {
+    Parameters(const std::string &filename)
+      : gamma(1)
+      , R(0)
+      , c_v(0)
+      , c_p(0)
+      , viscosity(0)
+      , lambda(0)
+      , Ma(0)
+      , output_tick(0)
+      , refine_tick(0)
+      , courant_number(0)
+    {
+      ParameterHandler prm;
+      {
+        prm.enter_subsection("Flow parameters");
+        prm.add_parameter("gamma",
+                          gamma,
+                          "Gas constant for ideal gas",
+                          Patterns::Double(1),
+                          true);
+        prm.add_parameter(
+          "R", R, "Specific gas constant", Patterns::Double(0), true);
+        prm.add_parameter("c_v",
+                          c_v,
+                          "Specific heat capacity at constant volume",
+                          Patterns::Double(0),
+                          true);
+        prm.add_parameter("c_p",
+                          c_p,
+                          "Specific heat capacity at constant pressure",
+                          Patterns::Double(0),
+                          true);
+        prm.add_parameter("viscosity",
+                          viscosity,
+                          "Fluid dynamic viscosity",
+                          Patterns::Double(0),
+                          true);
+        prm.add_parameter(
+          "lambda", lambda, "Thermal conductivity", Patterns::Double(0), true);
+        prm.add_parameter(
+          "Mach number", Ma, "Mach number", Patterns::Double(0), true);
+        prm.leave_subsection();
+      }
+      {
+        prm.enter_subsection("Control parameters");
+        prm.add_parameter("output tick",
+                          output_tick,
+                          "Define at which time interval to create output",
+                          Patterns::Double(0),
+                          true);
+        prm.add_parameter(
+          "refine tick",
+          refine_tick,
+          "Define at which time interval to dynamically adapt the mesh",
+          Patterns::Double(0),
+          true);
 
-  const double courant_number = 0.4 / std::pow(fe_degree, 1.5);
+        prm.add_parameter(
+          "Courant number",
+          courant_number,
+          "Courant number controlling the time step via dt = Courant * h",
+          Patterns::Double(0),
+          true);
+        prm.leave_subsection();
+      }
+      prm.parse_input(filename, "", true, true);
+    }
+
+    double gamma;
+    double R;
+    double c_v;
+    double c_p;
+    double viscosity;
+    double lambda;
+    double Ma;
+    double output_tick;
+    double refine_tick;
+    double courant_number;
+  };
 
 
 
@@ -72,8 +142,9 @@ namespace NavierStokes_DG
   class InitialCondition : public Function<dim>
   {
   public:
-    InitialCondition(const double time)
+    InitialCondition(const double time, const Parameters &param)
       : Function<dim>(dim + 2, time)
+      , parameters(param)
     {}
 
     virtual double
@@ -82,10 +153,10 @@ namespace NavierStokes_DG
       Point<3> x;
       for (unsigned int d = 0; d < dim; ++d)
         x[d] = xx[d];
-      const double c0 = 1. / Ma;
-      const double T0 = c0 * c0 / (gamma * R);
+      const double c0 = 1. / parameters.Ma;
+      const double T0 = c0 * c0 / (parameters.gamma * parameters.R);
       if (component == 0)
-        return 1 + 1. / (R * T0) * 1. / 16. *
+        return 1 + 1. / (parameters.R * T0) * 1. / 16. *
                      (std::cos(2 * x[0]) + std::cos(2 * x[1])) *
                      (std::cos(2 * x[2]) + 2.);
       else if (component == 1)
@@ -95,12 +166,15 @@ namespace NavierStokes_DG
       else if (component == dim)
         return 0.;
       else
-        return c_v * T0 +
+        return parameters.c_v * T0 +
                0.5 * (Utilities::fixed_power<2>(
                         std::sin(x[0]) * std::cos(x[1]) * std::cos(x[2])) +
                       Utilities::fixed_power<2>(
                         std::cos(x[0]) * std::sin(x[1]) * std::cos(x[2])));
     }
+
+  private:
+    const Parameters &parameters;
   };
 
 
@@ -119,10 +193,13 @@ namespace NavierStokes_DG
     return velocity;
   }
 
+
+
   template <int dim, typename Number>
   inline DEAL_II_ALWAYS_INLINE //
     Number
-    euler_pressure(const Tensor<1, dim + 2, Number> &conserved_variables)
+    euler_pressure(const Tensor<1, dim + 2, Number> &conserved_variables,
+                   const Parameters &                parameters)
   {
     const Tensor<1, dim, Number> velocity =
       euler_velocity<dim>(conserved_variables);
@@ -131,17 +208,22 @@ namespace NavierStokes_DG
     for (unsigned int d = 1; d < dim; ++d)
       rho_u_dot_u += conserved_variables[1 + d] * velocity[d];
 
-    return (gamma - 1.) * (conserved_variables[dim + 1] - 0.5 * rho_u_dot_u);
+    return (parameters.gamma - 1.) *
+           (conserved_variables[dim + 1] - 0.5 * rho_u_dot_u);
   }
+
+
 
   template <int dim, typename Number>
   inline DEAL_II_ALWAYS_INLINE //
     Tensor<1, dim + 2, Tensor<1, dim, Number>>
-    euler_flux(const Tensor<1, dim + 2, Number> &conserved_variables)
+    euler_flux(const Tensor<1, dim + 2, Number> &conserved_variables,
+               const Parameters &                parameters)
   {
     const Tensor<1, dim, Number> velocity =
       euler_velocity<dim>(conserved_variables);
-    const Number pressure = euler_pressure<dim>(conserved_variables);
+    const Number pressure =
+      euler_pressure<dim>(conserved_variables, parameters);
 
     Tensor<1, dim + 2, Tensor<1, dim, Number>> flux;
     for (unsigned int d = 0; d < dim; ++d)
@@ -157,6 +239,8 @@ namespace NavierStokes_DG
     return flux;
   }
 
+
+
   template <int n_components, int dim, typename Number>
   inline DEAL_II_ALWAYS_INLINE //
     Tensor<1, n_components, Number>
@@ -169,30 +253,37 @@ namespace NavierStokes_DG
     return result;
   }
 
+
+
   template <int dim, typename Number>
   inline DEAL_II_ALWAYS_INLINE //
     Tensor<1, dim + 2, Number>
     euler_numerical_flux(const Tensor<1, dim + 2, Number> &u_m,
                          const Tensor<1, dim + 2, Number> &u_p,
-                         const Tensor<1, dim, Number> &    normal)
+                         const Tensor<1, dim, Number> &    normal,
+                         const Parameters &                parameters)
   {
     const auto velocity_m = euler_velocity<dim>(u_m);
     const auto velocity_p = euler_velocity<dim>(u_p);
 
-    const auto pressure_m = euler_pressure<dim>(u_m);
-    const auto pressure_p = euler_pressure<dim>(u_p);
+    const auto pressure_m = euler_pressure<dim>(u_m, parameters);
+    const auto pressure_p = euler_pressure<dim>(u_p, parameters);
 
-    const auto flux_m = euler_flux<dim>(u_m);
-    const auto flux_p = euler_flux<dim>(u_p);
+    const auto flux_m = euler_flux<dim>(u_m, parameters);
+    const auto flux_p = euler_flux<dim>(u_p, parameters);
 
     const auto Lambda =
-      0.5 * std::sqrt(std::max(
-              velocity_p.norm_square() + gamma * pressure_p * (1. / u_p[0]),
-              velocity_m.norm_square() + gamma * pressure_m * (1. / u_m[0])));
+      0.5 *
+      std::sqrt(std::max(velocity_p.norm_square() +
+                           parameters.gamma * pressure_p * (1. / u_p[0]),
+                         velocity_m.norm_square() +
+                           parameters.gamma * pressure_m * (1. / u_m[0])));
 
     return 0.5 * (flux_m * normal + flux_p * normal) +
            0.5 * Lambda * (u_m - u_p);
   }
+
+
 
   template <int dim, typename Number>
   inline DEAL_II_ALWAYS_INLINE //
@@ -214,46 +305,56 @@ namespace NavierStokes_DG
     return result;
   }
 
+
+
   template <int dim, typename Number>
   inline DEAL_II_ALWAYS_INLINE //
     Number
-    temperature(const Tensor<1, dim + 2, Number> &conserved_variables)
+    temperature(const Tensor<1, dim + 2, Number> &conserved_variables,
+                const Parameters &                parameters)
   {
     const Number inverse_density = Number(1.) / conserved_variables[0];
-    const Number inverse_R       = 1. / R;
+    const Number inverse_R       = 1. / parameters.R;
     return euler_pressure(conserved_variables) * inverse_density * inverse_R;
   }
+
+
 
   template <int dim, typename Number>
   inline DEAL_II_ALWAYS_INLINE //
     Tensor<1, dim, Number>
     temperature_gradient(
       const Tensor<1, dim + 2, Number> &                conserved_variables,
-      const Tensor<1, dim + 2, Tensor<1, dim, Number>> &gradients)
+      const Tensor<1, dim + 2, Tensor<1, dim, Number>> &gradients,
+      const Parameters &                                parameters)
   {
-    const Number inverse_R = 1. / R;
-    return (gamma - 1.) * inverse_R *
+    const Number inverse_R = 1. / parameters.R;
+    return (parameters.gamma - 1.) * inverse_R *
            (gradients[dim + 1] -
             euler_velocity<dim>(conserved_variables) *
               velocity_gradient(conserved_variables, gradients));
   }
 
+
+
   template <int dim, typename Number>
   inline DEAL_II_ALWAYS_INLINE //
     Tensor<2, dim, Number>
     viscous_flux(const Tensor<1, dim + 2, Number> &conserved_variables,
-                 const Tensor<1, dim + 2, Tensor<1, dim, Number>> &gradients)
+                 const Tensor<1, dim + 2, Tensor<1, dim, Number>> &gradients,
+                 const Parameters &                                parameters)
   {
     const Tensor<2, dim, Number> grad_u =
       velocity_gradient(conserved_variables, gradients);
-    const Number scaled_div_u = viscosity * (2. / 3.) * trace(grad_u);
+    const Number scaled_div_u =
+      parameters.viscosity * (2. / 3.) * trace(grad_u);
 
     Tensor<2, dim, Number> result;
     for (unsigned int d = 0; d < dim; ++d)
       {
         for (unsigned int e = d; e < dim; ++e)
           {
-            result[d][e] = viscosity * (grad_u[d][e] + grad_u[e][d]);
+            result[d][e] = parameters.viscosity * (grad_u[d][e] + grad_u[e][d]);
             result[e][d] = result[d][e];
           }
         result[d][d] -= scaled_div_u;
@@ -308,7 +409,7 @@ namespace NavierStokes_DG
   public:
     static constexpr unsigned int n_quadrature_points_1d = n_points_1d;
 
-    EulerOperator(TimerOutput &timer_output);
+    EulerOperator(TimerOutput &timer_output, const Parameters &parameters);
 
     ~EulerOperator();
 
@@ -363,7 +464,8 @@ namespace NavierStokes_DG
 
     MatrixFree<dim, Number, VectorizedArrayType> data;
 
-    TimerOutput &timer;
+    TimerOutput &     timer;
+    const Parameters &parameters;
 
     std::map<types::boundary_id, std::unique_ptr<Function<dim>>>
       inflow_boundaries;
@@ -408,8 +510,11 @@ namespace NavierStokes_DG
 
 
   template <int dim, int degree, int n_points_1d>
-  EulerOperator<dim, degree, n_points_1d>::EulerOperator(TimerOutput &timer)
+  EulerOperator<dim, degree, n_points_1d>::EulerOperator(
+    TimerOutput &     timer,
+    const Parameters &parameters)
     : timer(timer)
+    , parameters(parameters)
   {
 #ifdef DEAL_II_WITH_MPI
     if (group_size == 1)
@@ -619,7 +724,7 @@ namespace NavierStokes_DG
         for (unsigned int q = 0; q < phi.n_q_points; ++q)
           {
             const auto w_q = phi.get_value(q);
-            phi.submit_gradient(euler_flux<dim>(w_q), q);
+            phi.submit_gradient(euler_flux<dim>(w_q, parameters), q);
           }
 
         phi.integrate_scatter(EvaluationFlags::gradients, dst);
@@ -654,7 +759,8 @@ namespace NavierStokes_DG
             const auto numerical_flux =
               euler_numerical_flux<dim>(phi_m.get_value(q),
                                         phi_p.get_value(q),
-                                        phi_m.get_normal_vector(q));
+                                        phi_m.get_normal_vector(q),
+                                        parameters);
             phi_m.submit_value(-numerical_flux, q);
             phi_p.submit_value(numerical_flux, q);
           }
@@ -722,7 +828,7 @@ namespace NavierStokes_DG
                                      "you set a boundary condition for "
                                      "this part of the domain boundary?"));
 
-            auto flux = euler_numerical_flux<dim>(w_m, w_p, normal);
+            auto flux = euler_numerical_flux<dim>(w_m, w_p, normal, parameters);
 
             if (at_outflow)
               for (unsigned int v = 0; v < VectorizedArray<Number>::size(); ++v)
@@ -873,7 +979,8 @@ namespace NavierStokes_DG
 
     std::array<double, 2> result{
       {0.5 * squared[0] / Utilities::fixed_power<dim>(2. * numbers::PI),
-       viscosity * squared[1] / Utilities::fixed_power<dim>(2. * numbers::PI)}};
+       parameters.viscosity * squared[1] /
+         Utilities::fixed_power<dim>(2. * numbers::PI)}};
 
     return result;
   }
@@ -899,7 +1006,7 @@ namespace NavierStokes_DG
           {
             const auto solution = phi.get_value(q);
             const auto velocity = euler_velocity<dim>(solution);
-            const auto pressure = euler_pressure<dim>(solution);
+            const auto pressure = euler_pressure<dim>(solution, parameters);
 
             const auto          inverse_jacobian = phi.inverse_jacobian(q);
             const auto          convective_speed = inverse_jacobian * velocity;
@@ -909,7 +1016,7 @@ namespace NavierStokes_DG
                 std::max(convective_limit, std::abs(convective_speed[d]));
 
             const auto speed_of_sound =
-              std::sqrt(gamma * pressure * (1. / solution[0]));
+              std::sqrt(parameters.gamma * pressure * (1. / solution[0]));
 
             Tensor<1, dim, VectorizedArrayType> eigenvector;
             for (unsigned int d = 0; d < dim; ++d)
@@ -954,6 +1061,10 @@ namespace NavierStokes_DG
     struct VelocityKernel
       : public Laplace::KernelBase<dim, dim, VectorizedArrayType>
     {
+      VelocityKernel(const Parameters &parameters)
+        : parameters(parameters)
+      {}
+
       void
       set_density(const MatrixFree<dim, Number, VectorizedArrayType> &mf,
                   const VectorType &euler_solution)
@@ -979,14 +1090,15 @@ namespace NavierStokes_DG
       {
         Tensor<2, dim, VectorizedArrayType> viscous_stress;
         const VectorizedArrayType           scaled_div_u =
-          (0.5 * time_step * viscosity * (2. / 3.)) *
+          (0.5 * time_step * parameters.viscosity * (2. / 3.)) *
           trace(Tensor<2, dim, VectorizedArrayType>(grad));
         for (unsigned int d = 0; d < dim; ++d)
           {
             for (unsigned int e = d; e < dim; ++e)
               {
                 viscous_stress[d][e] =
-                  (0.5 * time_step * viscosity) * (grad[d][e] + grad[e][d]);
+                  (0.5 * time_step * parameters.viscosity) *
+                  (grad[d][e] + grad[e][d]);
                 viscous_stress[e][d] = viscous_stress[d][e];
               }
             viscous_stress[d][d] -= scaled_div_u;
@@ -998,13 +1110,16 @@ namespace NavierStokes_DG
 
       Table<2, VectorizedArrayType> densities;
       double                        time_step;
+      const Parameters &            parameters;
     };
 
     struct EnergyKernel
       : public Laplace::KernelBase<dim, 1, VectorizedArrayType>
     {
-      EnergyKernel(const Table<2, VectorizedArrayType> &densities)
+      EnergyKernel(const Table<2, VectorizedArrayType> &densities,
+                   const Parameters &                   parameters)
         : densities(densities)
+        , parameters(parameters)
       {}
 
       virtual void
@@ -1013,16 +1128,19 @@ namespace NavierStokes_DG
                       const unsigned int                                 cell,
                       const unsigned int q_index) const override
       {
-        grad = (time_step * c_v * lambda) * grad;
+        grad = (time_step * parameters.c_v * parameters.lambda) * grad;
         value *= densities(cell, q_index);
       }
 
       const Table<2, VectorizedArrayType> &densities;
       double                               time_step;
+      const Parameters &                   parameters;
     };
 
     using MatrixFreeType = MatrixFree<dim, Number, VectorizedArrayType>;
     const MatrixFreeType &data;
+
+    const Parameters &parameters;
 
     VelocityKernel velocity_kernel;
     EnergyKernel   energy_kernel;
@@ -1043,9 +1161,11 @@ namespace NavierStokes_DG
     VectorType     energy_solution;
     mutable double time_step;
 
-    ViscousOperator(const MatrixFreeType &data)
+    ViscousOperator(const MatrixFreeType &data, const Parameters &parameters)
       : data(data)
-      , energy_kernel(velocity_kernel.densities)
+      , parameters(parameters)
+      , velocity_kernel(parameters)
+      , energy_kernel(velocity_kernel.densities, parameters)
       , velocity_operator(velocity_kernel)
       , energy_operator(energy_kernel)
       , n_velocity_iterations(0)
@@ -1172,7 +1292,7 @@ namespace NavierStokes_DG
             {
               const auto value    = eval_euler.get_value(q);
               const auto grad     = eval_euler.get_gradient(q);
-              const auto vel_flux = viscous_flux(value, grad);
+              const auto vel_flux = viscous_flux(value, grad, parameters);
               eval_vel.submit_gradient(Number(-0.5 * time_step) * vel_flux, q);
               Tensor<1, dim, VectorizedArrayType> momentum;
               for (unsigned int d = 0; d < dim; ++d)
@@ -1228,7 +1348,7 @@ namespace NavierStokes_DG
                        eval_m.inverse_jacobian(0))[dim - 1]) +
              std::abs((eval_p.get_normal_vector(0) *
                        eval_p.inverse_jacobian(0))[dim - 1])) *
-            Number(viscosity * (degree + 1) * (degree + 1));
+            Number(parameters.viscosity * (degree + 1) * (degree + 1));
 
           for (const unsigned int q : eval_m.quadrature_point_indices())
             {
@@ -1238,8 +1358,8 @@ namespace NavierStokes_DG
               const auto grad_w_m = eval_m.get_gradient(q);
               const auto grad_w_p = eval_p.get_gradient(q);
 
-              const auto flux_q1 = viscous_flux(w_m, grad_w_m);
-              const auto flux_q2 = viscous_flux(w_p, grad_w_p);
+              const auto flux_q1 = viscous_flux(w_m, grad_w_m, parameters);
+              const auto flux_q2 = viscous_flux(w_p, grad_w_p, parameters);
               Tensor<1, dim, VectorizedArrayType> value_flux;
               for (unsigned int d = 0; d < dim; ++d)
                 value_flux[d] = 0.5 * (flux_q1[d] * normal);
@@ -1254,12 +1374,10 @@ namespace NavierStokes_DG
               for (unsigned int d = 0; d < dim + 2; ++d)
                 for (unsigned int e = 0; e < dim; ++e)
                   w_jump[d][e] = (w_m[d] - w_p[d]) * (Number(0.5) * normal[e]);
-              eval_vel_m.submit_gradient((-time_step * 0.5) *
-                                           viscous_flux(w_m, w_jump),
-                                         q);
-              eval_vel_p.submit_gradient((-time_step * 0.5) *
-                                           viscous_flux(w_p, w_jump),
-                                         q);
+              eval_vel_m.submit_gradient(
+                (-time_step * 0.5) * viscous_flux(w_m, w_jump, parameters), q);
+              eval_vel_p.submit_gradient(
+                (-time_step * 0.5) * viscous_flux(w_p, w_jump, parameters), q);
             }
 
           eval_vel_m.integrate_scatter(EvaluationFlags::values |
@@ -1312,14 +1430,14 @@ namespace NavierStokes_DG
               const auto                momentum = eval_euler_vel.get_value(q);
               const auto                grad_u   = eval_vel.get_gradient(q);
               const VectorizedArrayType scaled_div_u =
-                viscosity * (2. / 3.) * trace(grad_u);
+                parameters.viscosity * (2. / 3.) * trace(grad_u);
               Tensor<2, dim, VectorizedArrayType> viscous_stress;
               for (unsigned int d = 0; d < dim; ++d)
                 {
                   for (unsigned int e = d; e < dim; ++e)
                     {
                       viscous_stress[d][e] =
-                        viscosity * (grad_u[d][e] + grad_u[e][d]);
+                        parameters.viscosity * (grad_u[d][e] + grad_u[e][d]);
                       viscous_stress[e][d] = viscous_stress[d][e];
                     }
                   viscous_stress[d][d] -= scaled_div_u;
@@ -1379,7 +1497,7 @@ namespace NavierStokes_DG
   class FlowProblem
   {
   public:
-    FlowProblem();
+    FlowProblem(const Parameters &parameters);
 
     void
     run(const double       final_time,
@@ -1422,12 +1540,14 @@ namespace NavierStokes_DG
     EulerOperator<dim, fe_degree, n_q_points_1d> euler_operator;
     ViscousOperator<dim, fe_degree>              viscous_operator;
 
+    const Parameters &parameters;
+
     double time, time_step;
 
     class Postprocessor : public DataPostprocessor<dim>
     {
     public:
-      Postprocessor();
+      Postprocessor(const Parameters &parameters);
 
       virtual void
       evaluate_vector_field(
@@ -1445,14 +1565,15 @@ namespace NavierStokes_DG
       get_needed_update_flags() const override;
 
     private:
-      const bool do_schlieren_plot;
+      const bool        do_schlieren_plot;
+      const Parameters &parameters;
     };
   };
 
 
 
   template <int dim>
-  FlowProblem<dim>::FlowProblem()
+  FlowProblem<dim>::FlowProblem(const Parameters &parameters)
     : pcout(std::cout, Utilities::MPI::this_mpi_process(MPI_COMM_WORLD) == 0)
 #ifdef DEAL_II_WITH_P4EST
     , triangulation(MPI_COMM_WORLD)
@@ -1465,8 +1586,9 @@ namespace NavierStokes_DG
     , fe_energy(fe_degree)
     , dof_handler_energy(triangulation)
     , timer(pcout, TimerOutput::never, TimerOutput::wall_times)
-    , euler_operator(timer)
-    , viscous_operator(euler_operator.get_matrix_free())
+    , euler_operator(timer, parameters)
+    , viscous_operator(euler_operator.get_matrix_free(), parameters)
+    , parameters(parameters)
     , time(0)
     , time_step(0)
   {}
@@ -1589,8 +1711,9 @@ namespace NavierStokes_DG
 
 
   template <int dim>
-  FlowProblem<dim>::Postprocessor::Postprocessor()
+  FlowProblem<dim>::Postprocessor::Postprocessor(const Parameters &parameters)
     : do_schlieren_plot(dim == 2)
+    , parameters(parameters)
   {}
 
 
@@ -1622,12 +1745,13 @@ namespace NavierStokes_DG
 
         const double         density  = solution[0];
         const Tensor<1, dim> velocity = euler_velocity<dim>(solution);
-        const double         pressure = euler_pressure<dim>(solution);
+        const double pressure = euler_pressure<dim>(solution, parameters);
 
         for (unsigned int d = 0; d < dim; ++d)
           computed_quantities[q](d) = velocity[d];
-        computed_quantities[q](dim)     = pressure;
-        computed_quantities[q](dim + 1) = std::sqrt(gamma * pressure / density);
+        computed_quantities[q](dim) = pressure;
+        computed_quantities[q](dim + 1) =
+          std::sqrt(parameters.gamma * pressure / density);
 
         if (do_schlieren_plot == true)
           computed_quantities[q](dim + 2) =
@@ -1701,7 +1825,7 @@ namespace NavierStokes_DG
           << energy[0] << ", dissipation: " << std::setprecision(4)
           << std::setw(10) << energy[1] << std::endl;
 
-    Postprocessor postprocessor;
+    Postprocessor postprocessor(parameters);
     DataOut<dim>  data_out;
 
     DataOutBase::VtkFlags flags;
@@ -1760,7 +1884,7 @@ namespace NavierStokes_DG
 
     make_dofs();
 
-    euler_operator.project(InitialCondition<dim>(time), solution);
+    euler_operator.project(InitialCondition<dim>(time, parameters), solution);
     refine_grid(0);
 
     double min_vertex_distance = std::numeric_limits<double>::max();
@@ -1771,8 +1895,8 @@ namespace NavierStokes_DG
     min_vertex_distance =
       Utilities::MPI::min(min_vertex_distance, MPI_COMM_WORLD);
 
-    time_step =
-      courant_number / euler_operator.compute_cell_transport_speed(solution);
+    time_step = parameters.courant_number /
+                euler_operator.compute_cell_transport_speed(solution);
     pcout << "Time step size: " << time_step
           << ", minimal h: " << min_vertex_distance
           << ", initial transport scaling: "
@@ -1793,7 +1917,7 @@ namespace NavierStokes_DG
         ++timestep_number;
         if (timestep_number % 5 == 0)
           time_step =
-            courant_number /
+            parameters.courant_number /
             Utilities::truncate_to_n_digits(
               euler_operator.compute_cell_transport_speed(solution), 3);
 
@@ -1826,17 +1950,17 @@ namespace NavierStokes_DG
 
         time += time_step;
 
-        if (static_cast<int>(time / output_tick) !=
-              static_cast<int>((time - time_step) / output_tick) ||
+        if (static_cast<int>(time / parameters.output_tick) !=
+              static_cast<int>((time - time_step) / parameters.output_tick) ||
             time >= final_time - 1e-12)
-          output_results(
-            static_cast<unsigned int>(std::round(time / output_tick)));
+          output_results(static_cast<unsigned int>(
+            std::round(time / parameters.output_tick)));
 
-        if (static_cast<int>(time / refine_tick) !=
-            static_cast<int>((time - time_step) / refine_tick))
+        if (static_cast<int>(time / parameters.refine_tick) !=
+            static_cast<int>((time - time_step) / parameters.refine_tick))
           {
-            refine_grid(
-              static_cast<unsigned int>(std::round(time / refine_tick)));
+            refine_grid(static_cast<unsigned int>(
+              std::round(time / parameters.refine_tick)));
             rk_register_1.reinit(solution);
             rk_register_2.reinit(solution);
           }
@@ -1851,8 +1975,6 @@ namespace NavierStokes_DG
 
 } // namespace NavierStokes_DG
 
-
-
 int
 main(int argc, char **argv)
 {
@@ -1861,56 +1983,42 @@ main(int argc, char **argv)
 
   try
     {
-      std::string  problem_setting = "-refrate";
-      bool         debug_timing    = false;
-      double       end_time        = 0.5;
-      unsigned int n_refinements   = 3;
+      std::string  filename      = "parameters.prm";
+      bool         debug_timing  = false;
+      double       end_time      = 0.5;
+      unsigned int n_refinements = 3;
 
       for (int arg_number = 1; arg_number < argc; ++arg_number)
         {
-          if (std::string(argv[arg_number]) == "-manual")
+          if (std::string(argv[arg_number]) == "-debug-timings")
+            debug_timing = true;
+          else if (std::string(argv[arg_number]).find("prm") !=
+                   std::string::npos)
+            filename = argv[arg_number];
+          else
             {
-              if (argc < arg_number + 3)
+              if (argc < arg_number + 2)
                 {
-                  std::cout
-                    << "In -manual mode, must give two number arguments for "
-                    << "end time and spatial refinement!" << std::endl;
+                  std::cout << "Please provide two number arguments for "
+                            << "end time and spatial refinement!" << std::endl;
+                  std::cout << "Optionally, you can add -debug-timings"
+                            << std::endl;
                   return 1;
                 }
-              problem_setting = "-manual";
-              std::stringstream str_time(argv[arg_number + 1]);
-              str_time >> end_time;
-              std::stringstream str_refine(argv[arg_number + 2]);
-              str_refine >> n_refinements;
-              arg_number += 2;
+              else
+                {
+                  std::stringstream str_time(argv[arg_number]);
+                  str_time >> end_time;
+                  std::stringstream str_refine(argv[arg_number + 1]);
+                  str_refine >> n_refinements;
+                  ++arg_number;
+                }
             }
-          else if (std::string(argv[arg_number]) == "-debug-timings")
-            debug_timing = true;
-          else
-            problem_setting = argv[arg_number];
         }
 
-      FlowProblem<dimension> euler_problem;
-      if (problem_setting == "-refrate")
-        euler_problem.run(1.5, 3, debug_timing);
-      else if (problem_setting == "-train")
-        euler_problem.run(0.5, 3, debug_timing);
-      else if (problem_setting == "-test")
-        euler_problem.run(0.01, 1, debug_timing);
-      else if (problem_setting == "-manual")
-        euler_problem.run(end_time, n_refinements, debug_timing);
-      else
-        {
-          std::cout << "Unknown setting " << problem_setting << std::endl;
-          std::cout << "Valid arguments are "
-                    << "-test, -train, -refrate, -debug-timings, -manual"
-                    << std::endl
-                    << "For -manual, you need to specify two numbers, the end "
-                    << "time and the number of refinements between 0 and 3"
-                    << std::endl;
-          std::cout << "Aborting" << std::endl;
-          return 1;
-        }
+      const Parameters       parameters(filename);
+      FlowProblem<dimension> euler_problem(parameters);
+      euler_problem.run(end_time, n_refinements, debug_timing);
     }
   catch (std::exception &exc)
     {
