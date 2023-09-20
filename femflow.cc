@@ -69,6 +69,7 @@ namespace NavierStokes_DG
       , courant_number(0)
       , n_refinements(0)
       , end_time(0)
+      , print_debug_timings(false)
     {
       ParameterHandler prm;
       {

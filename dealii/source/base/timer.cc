@@ -129,7 +129,7 @@ CPUClock::now() noexcept
   system_cpu_duration = usage.ru_utime.tv_sec + 1.e-6 * usage.ru_utime.tv_usec;
 #else
   //DEAL_II_WARNING("Unsupported platform. Porting not finished.")
-  std::abort();
+  //std::abort();
 #endif
   return time_point(
     internal::TimerImplementation::from_seconds<duration>(system_cpu_duration));
