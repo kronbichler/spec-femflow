@@ -1506,7 +1506,7 @@ namespace deal_II_exceptions
               abort_or_throw_on_exception,                               \
             __FILE__,                                                    \
             __LINE__,                                                    \
-            __PRETTY_FUNCTION__,                                         \
+            "",                                         \
             #cond,                                                       \
             #exc,                                                        \
             exc);                                                        \
@@ -1520,7 +1520,7 @@ namespace deal_II_exceptions
               abort_or_throw_on_exception,                               \
             __FILE__,                                                    \
             __LINE__,                                                    \
-            __PRETTY_FUNCTION__,                                         \
+            "",                                         \
             #cond,                                                       \
             #exc,                                                        \
             exc);                                                        \
@@ -1565,14 +1565,14 @@ namespace deal_II_exceptions
       {                                                                 \
         if (__builtin_expect(!(cond), false))                           \
           ::dealii::deal_II_exceptions::internals::issue_error_nothrow( \
-            __FILE__, __LINE__, __PRETTY_FUNCTION__, #cond, #exc, exc); \
+            __FILE__, __LINE__, "", #cond, #exc, exc); \
       }
 #  else /*ifdef DEAL_II_HAVE_BUILTIN_EXPECT*/
 #    define AssertNothrow(cond, exc)                                    \
       {                                                                 \
         if (!(cond))                                                    \
           ::dealii::deal_II_exceptions::internals::issue_error_nothrow( \
-            __FILE__, __LINE__, __PRETTY_FUNCTION__, #cond, #exc, exc); \
+            __FILE__, __LINE__, "", #cond, #exc, exc); \
       }
 #  endif /*ifdef DEAL_II_HAVE_BUILTIN_EXPECT*/
 #else
@@ -1616,7 +1616,7 @@ namespace deal_II_exceptions
             throw_on_exception,                                        \
           __FILE__,                                                    \
           __LINE__,                                                    \
-          __PRETTY_FUNCTION__,                                         \
+          "",                                         \
           #cond,                                                       \
           #exc,                                                        \
           exc);                                                        \
@@ -1630,7 +1630,7 @@ namespace deal_II_exceptions
             throw_on_exception,                                        \
           __FILE__,                                                    \
           __LINE__,                                                    \
-          __PRETTY_FUNCTION__,                                         \
+          "",                                         \
           #cond,                                                       \
           #exc,                                                        \
           exc);                                                        \
