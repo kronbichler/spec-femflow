@@ -2635,6 +2635,8 @@ namespace internal
       AlignedVector<double> plain_quadrature_points(cell_array.size() *
                                                     n_mapping_points * dim);
 
+      const unsigned int n_threads = 1;
+
       const double jacobian_size = ExtractCellHelper::get_jacobian_size(tria);
 
       std::vector<unsigned int> cell_data_index;
@@ -2647,16 +2649,14 @@ namespace internal
         // work
         unsigned int work_per_chunk =
           std::max(std::size_t(1),
-                   (cell_array.size() + MultithreadInfo::n_threads() - 1) /
-                     MultithreadInfo::n_threads());
+                   (cell_array.size() + n_threads - 1) / n_threads);
 
         // we manually use tasks here rather than parallel::apply_to_subranges
         // because we want exactly as many loops as we have threads - the
         // initialization of the loops with FEValues is expensive
         std::size_t          offset = 0;
         Threads::TaskGroup<> tasks;
-        for (unsigned int t = 0; t < MultithreadInfo::n_threads();
-             ++t, offset += work_per_chunk)
+        for (unsigned int t = 0; t < n_threads; ++t, offset += work_per_chunk)
           tasks += Threads::new_task(
             &ExtractCellHelper::mapping_q_query_fe_values<dim>,
             offset,
@@ -2802,8 +2802,7 @@ namespace internal
                 shape_infos[my_q],
                 my_data);
             },
-            std::max(cell_type.size() / MultithreadInfo::n_threads() / 2,
-                     std::size_t(2U)));
+            std::max(cell_type.size() / n_threads / 2, std::size_t(2U)));
         }
 
       const std::vector<FaceToCellTopology<VectorizedArrayType::size()>>
@@ -2935,8 +2934,7 @@ namespace internal
                 shape_infos[my_q],
                 my_data);
             },
-            std::max(face_type.size() / MultithreadInfo::n_threads() / 2,
-                     std::size_t(2U)));
+            std::max(face_type.size() / n_threads / 2, std::size_t(2U)));
         }
 
       // step 6c: figure out if normal vectors are the same on some of the
@@ -2971,8 +2969,7 @@ namespace internal
                   face_type[face] = flat_faces;
               }
         },
-        std::max(face_type.size() / MultithreadInfo::n_threads() / 2,
-                 std::size_t(2U)));
+        std::max(face_type.size() / n_threads / 2, std::size_t(2U)));
 
       // step 7: compute the face data by cells. This still needs to be
       // transitioned to extracting the information from cell quadrature
