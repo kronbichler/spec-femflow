@@ -451,6 +451,12 @@ namespace MatrixFreeTools
       {}
 
       void
+      clear()
+      {
+        this->phi = nullptr;
+      }
+
+      void
       initialize(FEEvaluation<dim,
                               fe_degree,
                               n_q_points_1d,
@@ -1057,6 +1063,8 @@ namespace MatrixFreeTools
 
             helper.distribute_local_to_global(diagonal_global_components);
           }
+
+        helper.clear();
       },
       diagonal_global,
       dummy,
