@@ -1,6 +1,7 @@
 #include <deal.II/base/conditional_ostream.h>
 #include <deal.II/base/function.h>
 #include <deal.II/base/logstream.h>
+#include <deal.II/base/multithread_info.h>
 #include <deal.II/base/parameter_handler.h>
 #include <deal.II/base/time_stepping.h>
 #include <deal.II/base/timer.h>
@@ -2003,6 +2004,8 @@ main(int argc, char **argv)
 
   try
     {
+      MultithreadInfo::set_thread_limit(1);
+
       std::string  filename      = "parameters.prm";
       if (argc > 1)
         filename = argv[1];
