@@ -1673,14 +1673,11 @@ namespace NavierStokes_DG
     euler_operator.initialize_vector(solution);
     viscous_operator.initialize();
 
-    std::locale s = pcout.get_stream().getloc();
-    pcout.get_stream().imbue(std::locale(""));
     pcout << "Number of degrees of freedom: " << dof_handler.n_dofs()
           << " ( = " << (dim + 2) << " [vars] x "
           << triangulation.n_global_active_cells() << " [cells] x "
           << Utilities::pow(fe_degree + 1, dim) << " [dofs/cell/var] )"
           << std::endl;
-    pcout.get_stream().imbue(s);
   }
 
 
