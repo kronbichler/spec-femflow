@@ -129,36 +129,34 @@ namespace NavierStokes_DG
           "Number of refinements, resulting in 64 * 2^refinements elements",
           Patterns::Integer(0),
           true);
-        prm.add_parameter(
-          "end time",
-          end_time,
-          "End time for the simulation",
-          Patterns::Double(0),
-          true);
-        prm.add_parameter(
-          "print debug timings",
-          print_debug_timings,
-          "true/false",
-          Patterns::Bool(),
-          true);
+        prm.add_parameter("end time",
+                          end_time,
+                          "End time for the simulation",
+                          Patterns::Double(0),
+                          true);
+        prm.add_parameter("print debug timings",
+                          print_debug_timings,
+                          "true/false",
+                          Patterns::Bool(),
+                          true);
         prm.leave_subsection();
       }
       prm.parse_input(filename, "", true, true);
     }
 
-    double gamma;
-    double R;
-    double c_v;
-    double c_p;
-    double viscosity;
-    double lambda;
-    double Ma;
-    double output_tick;
-    double refine_tick;
-    double courant_number;
+    double       gamma;
+    double       R;
+    double       c_v;
+    double       c_p;
+    double       viscosity;
+    double       lambda;
+    double       Ma;
+    double       output_tick;
+    double       refine_tick;
+    double       courant_number;
     unsigned int n_refinements;
-    double end_time;
-    bool print_debug_timings;
+    double       end_time;
+    bool         print_debug_timings;
   };
 
 
@@ -1176,10 +1174,9 @@ namespace NavierStokes_DG
     VectorType                 mass_diagonal_velocity;
     VectorType                 stiff_diagonal_velocity;
     DiagonalMatrix<VectorType> energy_diagonal;
-    mutable unsigned int       n_velocity_iterations;
+    mutable double             velocity_solver_residuals;
     mutable unsigned int       n_velocity_solves;
-    mutable unsigned int       n_energy_iterations;
-    mutable double             energy_residuals;
+    mutable double             energy_solver_residuals;
 
   public:
     VectorType     velocity_solution;
@@ -1193,10 +1190,9 @@ namespace NavierStokes_DG
       , energy_kernel(velocity_kernel.densities, parameters)
       , velocity_operator(velocity_kernel)
       , energy_operator(energy_kernel)
-      , n_velocity_iterations(0)
+      , velocity_solver_residuals(0)
       , n_velocity_solves(0)
-      , n_energy_iterations(0)
-      , energy_residuals(0)
+      , energy_solver_residuals(0)
     {}
 
     void
@@ -1242,14 +1238,14 @@ namespace NavierStokes_DG
         velocity_kernel.set_density(data, solution);
         velocity_kernel.time_step = time_step;
 
-        SolverControl        control(1000, 1e-8 * rhs.l2_norm());
-        SolverCG<VectorType> solver_cg(control);
+        IterationNumberControl control(6, 1e-13);
+        SolverCG<VectorType>   solver_cg(control);
         solver_cg.solve(velocity_operator,
                         velocity_solution,
                         rhs,
                         velocity_diagonal);
         ++n_velocity_solves;
-        n_velocity_iterations += control.last_step();
+        velocity_solver_residuals += control.last_value();
       }
       {
         VectorType rhs;
@@ -1267,12 +1263,11 @@ namespace NavierStokes_DG
 
         energy_kernel.time_step = time_step;
 
-        SolverControl        control(1000, 1e-8 * rhs.l2_norm());
-        SolverCG<VectorType> solver_cg(control);
+        IterationNumberControl control(5, 1e-13);
+        SolverCG<VectorType>   solver_cg(control);
         energy_solution = 0;
         solver_cg.solve(energy_operator, energy_solution, rhs, energy_diagonal);
-        n_energy_iterations += control.last_step();
-        energy_residuals += control.last_value();
+        energy_solver_residuals += control.last_value();
       }
       data.cell_loop(&ViscousOperator::update_velocity,
                      this,
@@ -1287,13 +1282,15 @@ namespace NavierStokes_DG
     print_solver_statistics()
     {
       if (Utilities::MPI::this_mpi_process(MPI_COMM_WORLD) == 0)
-        std::cout
-          << "Velocity solver average iterations: " << std::setprecision(3)
-          << static_cast<double>(n_velocity_iterations) / n_velocity_solves
-          << std::endl
-          << "Energy solver average iterations: "
-          << static_cast<double>(n_energy_iterations) / n_velocity_solves
-          << " with accumulated error " << energy_residuals << std::endl;
+        std::cout << "Velocity solver average converged residuals: "
+                  << std::setprecision(3)
+                  << static_cast<double>(velocity_solver_residuals) /
+                       n_velocity_solves
+                  << std::endl
+                  << "Energy solver average converged residuals: "
+                  << static_cast<double>(energy_solver_residuals) /
+                       n_velocity_solves
+                  << std::endl;
     }
 
   private:
@@ -1673,11 +1670,15 @@ namespace NavierStokes_DG
     euler_operator.initialize_vector(solution);
     viscous_operator.initialize();
 
+
+    std::locale s = pcout.get_stream().getloc();
+    pcout.get_stream().imbue(std::locale("en_US.UTF8"));
     pcout << "Number of degrees of freedom: " << dof_handler.n_dofs()
           << " ( = " << (dim + 2) << " [vars] x "
           << triangulation.n_global_active_cells() << " [cells] x "
           << Utilities::pow(fe_degree + 1, dim) << " [dofs/cell/var] )"
           << std::endl;
+    pcout.get_stream().imbue(s);
   }
 
 
@@ -1896,8 +1897,8 @@ namespace NavierStokes_DG
   void
   FlowProblem<dim>::run()
   {
-    pcout << "Running with T=" << parameters.end_time << " n_refine=" << parameters.n_refinements
-          << std::endl;
+    pcout << "Running with T=" << parameters.end_time
+          << " n_refine=" << parameters.n_refinements << std::endl;
     make_grid(parameters.n_refinements);
 
     make_dofs();
@@ -2003,7 +2004,7 @@ main(int argc, char **argv)
     {
       MultithreadInfo::set_thread_limit(1);
 
-      std::string  filename      = "parameters.prm";
+      std::string filename = "parameters.prm";
       if (argc > 1)
         filename = argv[1];
 
